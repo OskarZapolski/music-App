@@ -1,17 +1,37 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import LogIn from "./components/login";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./components/home";
 
 function App() {
   const [token, setToken] = useState("");
 
-  const hash = window.location.hash;
-  const _token = hash.split("&")[0].split("=")[1];
-  window.localStorage.setItem("token", _token);
-  setToken(_token);
+  useEffect(() => {
+    const token = window.localStorage.getItem("token");
+    const hash = window.location.hash;
+    if (!token) {
+      const _token = hash.split("&")[0].split("=")[1];
+      setToken(_token);
+      window.localStorage.setItem("token", _token);
+    } else {
+      setToken(token);
+    }
+
+    window.location.hash = "";
+  }, []);
+
   return (
     <div className="font-mono">
-      <LogIn />
+      {!token ? (
+        <LogIn />
+      ) : (
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+          </Routes>
+        </BrowserRouter>
+      )}
     </div>
   );
 }
