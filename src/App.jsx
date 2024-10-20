@@ -9,18 +9,21 @@ function App() {
 
   useEffect(() => {
     const token = window.localStorage.getItem("token");
+
     const hash = window.location.hash;
-    if (!token) {
+
+    if (!token && hash) {
       const _token = hash.split("&")[0].split("=")[1];
+      console.log(hash.split("&")[0].split("=")[1]);
+      localStorage.setItem("token", _token);
+
       setToken(_token);
-      window.localStorage.setItem("token", _token);
     } else {
       setToken(token);
     }
-
-    window.location.hash = "";
   }, []);
 
+  console.log(token);
   return (
     <div className="font-mono">
       {!token ? (
@@ -28,7 +31,7 @@ function App() {
       ) : (
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home token={token} />} />
           </Routes>
         </BrowserRouter>
       )}
