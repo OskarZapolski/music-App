@@ -6,6 +6,8 @@ import Home from "./components/home";
 
 function App() {
   const [token, setToken] = useState("");
+  const clientId = "aa11595a5869411eacc30f6af0af738d";
+  const secretId = "3e867675d0254603a866f88d98ad3820";
 
   useEffect(() => {
     const token = window.localStorage.getItem("token");
@@ -14,16 +16,16 @@ function App() {
 
     if (!token && hash) {
       const _token = hash.split("&")[0].split("=")[1];
-      console.log(hash.split("&")[0].split("=")[1]);
+
       localStorage.setItem("token", _token);
 
       setToken(_token);
     } else {
       setToken(token);
     }
+    window.location.hash = "";
   }, []);
 
-  console.log(token);
   return (
     <div className="font-mono">
       {!token ? (
@@ -31,7 +33,12 @@ function App() {
       ) : (
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Home token={token} />} />
+            <Route
+              path="/"
+              element={
+                <Home token={token} clientId={clientId} secretId={secretId} />
+              }
+            />
           </Routes>
         </BrowserRouter>
       )}
