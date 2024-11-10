@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import PlaylistIcon from "./playlistIcon";
 import PlaylistBody from "./playlistBody";
+import Navbar from "./navbar";
 
 export const playlistContext = createContext();
 
@@ -30,14 +31,14 @@ export default function MainContent({ playlists }) {
           {arrOfplaylists}
         </div>
       ) : (
-        <div className="w-11/12 h-100 text-white   mt-14 absolute right-0 pb-16">
+        <>
           <PlaylistBody
             name={playlistsTodisplay.name}
             id={playlistsTodisplay.id}
             images={playlistsTodisplay.images}
             tracksUrl={playlistsTodisplay.tracksUrl}
           />
-        </div>
+        </>
       )}
     </playlistContext.Provider>
   );

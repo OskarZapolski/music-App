@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import FavoriteIcon from "../icons/favorite-icon";
-import HomeIcon from "../icons/home-icon";
-import LibraryIcon from "../icons/library-icon";
+
 import getPlaylist from "./getPlaylist";
 import MainContent from "./mainContent";
+import LoadingIcon from "./loadingIcon";
+import Navbar from "./navbar";
 
 export default function Home({ token, clientId, secretId }) {
   const [randomPlaylists, setRandomPlaylists] = useState([]);
@@ -52,7 +52,7 @@ export default function Home({ token, clientId, secretId }) {
         }
       });
   }, []);
-
+  // localStorage.removeItem("token");
   useEffect(() => {
     async function setPlaylist() {
       getPlaylist(token, categories).map((playlist) =>
@@ -65,21 +65,13 @@ export default function Home({ token, clientId, secretId }) {
   }, []);
   // rgba(22,3,45,0.7344187675070029)
   return (
-    <div className="bg-[#2C2E3A] bg-gradient-to-r from-[rgba(0,0,0,0.7087885154061625)] from-50% to-[rgba(14,2,28,0.9529061624649859)] bg-gra h-screen w-screen flex overflow-x-hidden relative">
-      <nav className="w-1/12 bg-[#000000] grid grid-rows-8 items-center justify-items-center fixed h-screen z-10">
-        <FavoriteIcon
-          styles={"text-gray-100 row-start-5 hover:text-slate-300 duration-300"}
-        />
-        <HomeIcon
-          styles={"text-gray-100 row-start-3 hover:text-slate-300 duration-300"}
-        />
-        <LibraryIcon
-          styles={
-            "text-gray-100 row-start-4 flex justify-center items-center hover:text-slate-300 duration-300"
-          }
-        />
-      </nav>
-      <MainContent playlists={randomPlaylists} />
-    </div>
+    <>
+      <Navbar />
+      {randomPlaylists ? (
+        <MainContent playlists={randomPlaylists} />
+      ) : (
+        <LoadingIcon />
+      )}
+    </>
   );
 }
