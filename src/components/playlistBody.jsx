@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Navbar from "./navbar";
 import PlayMusicIcon from "../icons/playMusic-icon";
+import Player from "./player";
 
 export default function PlaylistBody() {
   const [tracksArr, setTracksArr] = useState();
@@ -32,7 +33,7 @@ export default function PlaylistBody() {
             console.log(track);
             return (
               <div className="group grid grid-cols-8 py-3 px-3 hover:bg-[#51515169] items-center duration-200 rounded-lg">
-                <div className=" flex items-center text-base  w-full max-w-md text-ellipsis truncate col-span-3">
+                <div className=" flex items-center text-base  w-full max-w-md text-ellipsis truncate col-span-3 relative">
                   <img
                     src={track.track.album.images[2].url}
                     alt=""
@@ -66,7 +67,8 @@ export default function PlaylistBody() {
   return (
     <>
       <Navbar />
-      <div className="w-11/12 h-100 text-white mt-10 absolute right-0 pb-16 pl-10">
+      <Player />
+      <div className="w-11/12 h-100 text-white mt-10 absolute right-0 pb-16 pl-10 ">
         <div className="text-2xl text-white font-sans w-[95%]">
           <div className="flex items-center">
             <img src={images[0].url} alt="" className="w-1/6 pb-10" />

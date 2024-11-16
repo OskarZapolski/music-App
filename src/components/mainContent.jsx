@@ -27,7 +27,7 @@ export default function MainContent({ playlists }) {
   return (
     <playlistContext.Provider value={setPlaylistsToDisplay}>
       {!playlistsTodisplay ? (
-        <div className="w-10/12 h-100 text-white grid grid-cols-4 gap-10 mx-10 gap-y-16 mt-14 absolute right-0 pb-16">
+        <div className="w-10/12 h-100 text-white grid grid-cols-4 gap-10 mx-10 gap-y-16 mt-14 absolute right-0 pb-16 ">
           {arrOfplaylists}
         </div>
       ) : (

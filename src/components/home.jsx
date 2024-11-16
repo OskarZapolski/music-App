@@ -52,7 +52,7 @@ export default function Home({ token, clientId, secretId }) {
         }
       });
   }, []);
-  // localStorage.removeItem("token");
+
   useEffect(() => {
     async function setPlaylist() {
       getPlaylist(token, categories).map((playlist) =>

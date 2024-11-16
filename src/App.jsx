@@ -29,7 +29,7 @@ function App() {
 
   return (
     <div className="font-mono">
-      <div className="bg-[#2C2E3A] bg-gradient-to-r from-[rgba(0,0,0,0.7087885154061625)] from-50% to-[rgba(14,2,28,0.9529061624649859)] bg-gra h-screen w-screen flex overflow-x-hidden relative">
+      <div className="bg-[#2C2E3A] bg-gradient-to-r from-[rgba(0,0,0,0.7087885154061625)] from-50% to-[rgba(14,2,28,0.9529061624649859)] bg-gra h-screen w-screen flex overflow-x-hidden relative scrollbar scrollbar-thumb-gray-500 scrollbar-thumb-rounded-full scrollbar-track-transparent">
         {!token ? (
           <LogIn />
         ) : (

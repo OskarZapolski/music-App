@@ -4,7 +4,7 @@ export default function PlayMusicIcon() {
       className="hidden group-hover:block fill-white absolute group-hover:bg-[#000000b8] p-[6px]"
       fill="#000000"
       height="60px"
-      width="60px"
+      width="12%"
       version="1.1"
       id="Capa_1"
       xmlns="http://www.w3.org/2000/svg"
