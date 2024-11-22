@@ -56,19 +56,18 @@ export default function Home({ token, clientId, secretId }) {
   useEffect(() => {
     async function setPlaylist() {
       getPlaylist(token, categories).map((playlist) =>
-        playlist.then((res) =>
-          setRandomPlaylists((prev) => [...prev, res, categories])
-        )
+        playlist.then((res) => setRandomPlaylists((prev) => [...prev, res]))
       );
     }
     return setPlaylist;
   }, []);
   // rgba(22,3,45,0.7344187675070029)
+
   return (
     <>
       <Navbar />
       {randomPlaylists ? (
-        <MainContent playlists={randomPlaylists} />
+        <MainContent playlists={randomPlaylists} categories={categories} />
       ) : (
         <LoadingIcon />
       )}

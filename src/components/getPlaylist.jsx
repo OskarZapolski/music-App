@@ -10,7 +10,7 @@ export default function getPlaylist(token, category) {
       fetchOptions
     )
       .then((res) => res.json())
-      .then((data) => data.playlists.items);
+      .then((data) => [category, ...data.playlists.items]);
   });
 
   return ps;

@@ -14,6 +14,7 @@ export default function PlaylistIcon({
 
   return (
     <div
+      className="cursor-pointer"
       key={id}
       onClick={() => {
         setPlaylistToDisplay({ id, name, images, tracksUrl });
