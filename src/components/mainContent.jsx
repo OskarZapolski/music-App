@@ -1,13 +1,17 @@
-import { createContext, useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import PlaylistIcon from "./playlistIcon";
 import PlaylistBody from "./playlistBody";
-import Navbar from "./navbar";
+
+import Player from "./player";
+import { playerContext } from "../App";
 
 export const playlistContext = createContext();
 
 export default function MainContent({ playlists, categories }) {
   const token = localStorage.getItem("token");
+  console.log(playlists);
   const [playlistsTodisplay, setPlaylistsToDisplay] = useState();
+  const [player, setPlayer] = useContext(playerContext);
 
   const [searchedTracks, setSearchedTracks] = useState();
 
@@ -25,17 +29,18 @@ export default function MainContent({ playlists, categories }) {
           Authorization: `Bearer ${token}`,
         },
       });
-      const data = await response.json();
-      setSearchedTracks(data.tracks.items.map((track) => ({ ...track })));
+      if (response.ok) {
+        const data = await response.json();
+        setSearchedTracks(data.tracks.items.map((track) => ({ ...track })));
+      }
     }
-    fetchSearchTracks(url);
+    searchInputValue && fetchSearchTracks(url);
     return fetchSearchTracks;
   }, [searchInputValue]);
   console.log(searchedTracks);
-
   const arrOfplaylists = playlists.map((playlistsArr) =>
     playlistsArr.map((playlist) => {
-      if (typeof playlist === "object") {
+      if (typeof playlist === "object" && playlist != null) {
         return (
           <PlaylistIcon
             tracksUrl={playlist.tracks.href}
@@ -54,21 +59,25 @@ export default function MainContent({ playlists, categories }) {
   );
 
   return (
-    <playlistContext.Provider value={setPlaylistsToDisplay}>
+    <>
       {!playlistsTodisplay ? (
-        <div>
-          <div className="w-11/12 fixed bg-[#000000] right-0 flex items-center justify-center h-[10%] z-10">
-            <input
-              type="search"
-              className="w-1/2  bg-zinc-800 p-2 rounded-3xl text-white text-lg focus:outline-none"
-              placeholder="Search"
-              value={searchInputValue}
-              onChange={(e) => setSearchInputValue(e.target.value)}
-            />
-          </div>
-          <div className="w-10/12  text-white grid grid-cols-4 gap-10 mx-10 gap-y-10 mt-[7%] absolute right-0 pb-16 ">
-            {arrOfplaylists}
-          </div>
+        <div className="w-full">
+          <playlistContext.Provider value={setPlaylistsToDisplay}>
+            <div className="w-11/12 fixed bg-[#000000] right-0 flex items-center justify-center h-[10%] z-10">
+              <input
+                type="search"
+                className="w-1/2  bg-zinc-800 p-2 rounded-3xl text-white text-lg focus:outline-none"
+                placeholder="Search"
+                value={searchInputValue}
+                onChange={(e) => setSearchInputValue(e.target.value)}
+              />
+            </div>
+            <div className="relative h-4/5  w-full overflow-y-scroll scrollbar scrollbar-thumb-gray-500 scrollbar-thumb-rounded-full scrollbar-track-transparent top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
+              <div className="w-11/12 bg-[#2C2E3A] bg-gradient-to-r from-[rgba(0,0,0,0.7087885154061625)] from-50% to-[rgba(14,2,28,0.9529061624649859)] text-white grid grid-cols-4 gap-10  gap-y-10 rounded-2xl absolute right-0 pb-16 z-40 p-10">
+                {arrOfplaylists}
+              </div>
+            </div>
+          </playlistContext.Provider>
         </div>
       ) : (
         <>
@@ -80,6 +89,14 @@ export default function MainContent({ playlists, categories }) {
           />
         </>
       )}
-    </playlistContext.Provider>
+      {player && (
+        <Player
+          img={player.img}
+          name={player.name}
+          artist={player.artist}
+          preview_url={player.preview_url}
+        />
+      )}
+    </>
   );
 }

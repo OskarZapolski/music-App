@@ -1,6 +1,9 @@
+import { useNavigate } from "react-router-dom";
 export default function HomeIcon({ styles }) {
+  const nav = useNavigate();
   return (
     <svg
+      onClick={() => nav("/")}
       className={styles}
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"

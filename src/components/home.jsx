@@ -7,28 +7,9 @@ import Navbar from "./navbar";
 
 export default function Home({ token, clientId, secretId }) {
   const [randomPlaylists, setRandomPlaylists] = useState([]);
-  const categories = ["chill", "pop", "hiphop"];
+  const categories = ["chill vibes", "pop", "rap", "rock"];
+
   useEffect(() => {
-    // const authOptions = {
-    //   method: "GET",
-    //   headers: {
-    //     Authorization: `Bearer ${token}`,
-    //     "Content-Type": "application/json",
-    //   },
-    // };
-
-    // fetch(
-    //   `https://api.spotify.com/v1/browse/categories/party/playlists`,
-    //   authOptions
-    // )
-    //   .then((res) => res.json())
-    //   .then((data) => console.log(data.playlists.items))
-    //   .catch((err) => console.error(err));
-
-    // fetch(`https://api.spotify.com/v1/playlists/${playlistId}`)
-    //   .then((res) => res.json())
-    //   .then((data) => console.log(data));
-
     const refreshToken = localStorage.getItem("refresh_token");
 
     const fetchRefreshTokenOptions = {
@@ -43,31 +24,46 @@ export default function Home({ token, clientId, secretId }) {
       }),
     };
 
-    fetch("https://accounts.spotify.com/api/token", fetchRefreshTokenOptions)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        if (data.refreshToken) {
-          localStorage.setItem("refresh_token", data.refreshToken);
-        }
-      });
+    // fetch("https://accounts.spotify.com/api/token", fetchRefreshTokenOptions)
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     console.log(data);
+    //     if (data.refreshToken) {
+    //       localStorage.setItem("refresh_token", data.refreshToken);
+    //     }
+    //   });
   }, []);
 
   useEffect(() => {
     async function setPlaylist() {
       getPlaylist(token, categories).map((playlist) =>
-        playlist.then((res) => setRandomPlaylists((prev) => [...prev, res]))
+        playlist.then((res) => {
+          const arr = [];
+          res.map((res) => {
+            if (res != null) {
+              if (arr.length < 5) {
+                arr.push(res);
+              }
+            }
+          });
+
+          setRandomPlaylists((prev) => [...prev, arr]);
+        })
       );
     }
     return setPlaylist;
   }, []);
   // rgba(22,3,45,0.7344187675070029)
+  console.log(randomPlaylists);
 
   return (
     <>
       <Navbar />
+
       {randomPlaylists ? (
-        <MainContent playlists={randomPlaylists} categories={categories} />
+        <>
+          <MainContent playlists={randomPlaylists} categories={categories} />
+        </>
       ) : (
         <LoadingIcon />
       )}

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { playlistContext } from "./mainContent";
 import { useNavigate } from "react-router-dom";
 
