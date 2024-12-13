@@ -20,7 +20,7 @@ export default function MainContent({ playlists, categories }) {
   useEffect(() => {
     const url = `https://api.spotify.com/v1/search?q=${encodeURIComponent(
       searchInputValue
-    )}&type=track&limit=10`;
+    )}&type=track&limit=10&market=USA`;
 
     async function fetchSearchTracks(url) {
       const response = await fetch(url, {
@@ -57,7 +57,7 @@ export default function MainContent({ playlists, categories }) {
       }
     })
   );
-
+  console.log(player);
   return (
     <>
       {!playlistsTodisplay ? (
