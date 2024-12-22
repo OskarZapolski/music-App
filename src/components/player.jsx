@@ -3,14 +3,14 @@ import PreviousTrackIcon from "../icons/previousTrack-icon";
 import NextTrackIcon from "../icons/nextTrack-icon";
 import PauseTrackIcon from "../icons/pauseTrack-icon";
 import { useEffect, useState } from "react";
-export default function Player({ img, name, artist, preview_url }) {
-  const [isPlaying, setIsPlaying] = useState(false);
-  console.log(preview_url);
+export default function Player({ img, name, artist }) {
+  const [isPlaying, setIsPlaying] = useState(true);
+
   useEffect(() => {
-    setIsPlaying(false);
+    setIsPlaying(true);
   }, [img]);
   return (
-    <div className="fixed bottom-0 h-[11.5%] w-full bg-stone-950 right-0 z-10 text-white font-sans grid grid-cols-3">
+    <div className="fixed bottom-0  lg:h-[15%] xl:h-[12%] w-full bg-stone-950 right-0 z-10 text-white font-sans grid grid-cols-3">
       <div className="mx-4 flex items-center h-full">
         <img src={img} alt="" className="w-[11%] rounded-lg mr-5 ml-5" />
         <div>

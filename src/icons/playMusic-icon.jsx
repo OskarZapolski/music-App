@@ -1,4 +1,4 @@
-export default function PlayMusicIcon({ setPlayer, track }) {
+export default function PlayMusicIcon({ setPlayer, track, playTrack }) {
   return (
     <svg
       className="hidden group-hover:block fill-white absolute group-hover:bg-[#000000b8] p-[6px]"
@@ -9,14 +9,15 @@ export default function PlayMusicIcon({ setPlayer, track }) {
       id="Capa_1"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 60 60"
-      onClick={() =>
+      onClick={() => {
         setPlayer({
           img: track.track.album.images[2].url,
           name: track.track.name,
           artist: track.track.artists[0].name,
           preview_url: track.track.preview_url,
-        })
-      }
+        });
+        playTrack(track.track.uri);
+      }}
     >
       <g>
         <path

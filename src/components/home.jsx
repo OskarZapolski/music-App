@@ -54,7 +54,6 @@ export default function Home({ token, clientId, secretId }) {
     return setPlaylist;
   }, []);
   // rgba(22,3,45,0.7344187675070029)
-  console.log(randomPlaylists);
 
   return (
     <>

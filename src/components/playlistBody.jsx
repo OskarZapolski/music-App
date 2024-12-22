@@ -5,15 +5,21 @@ import PlayMusicIcon from "../icons/playMusic-icon";
 import Player from "./player";
 import LoadingIcon from "./loadingIcon";
 import { playerContext } from "../App";
+import { palyTrackFunctionContext } from "../App";
 
 export default function PlaylistBody() {
   const [tracksArr, setTracksArr] = useState();
   const [tracksToDisplay, setTracksToDisplay] = useState();
   const [player, setPlayer] = useContext(playerContext);
+  const playTrack = useContext(palyTrackFunctionContext);
 
   const accessToken = localStorage.getItem("token");
 
   const { id, name, images, tracksUrl } = useLocation().state;
+  //fix styles
+  const containerStyles = {
+    paddingBottom: player ? "20vh" : "4rem",
+  };
   useEffect(() => {
     function fetchTracks() {
       fetch(tracksUrl, {
@@ -34,7 +40,16 @@ export default function PlaylistBody() {
       if (tracksArr) {
         setTracksToDisplay(
           tracksArr.map((track) => {
-            console.log(track);
+            const mins = Math.floor(
+              Math.floor(track.track.duration_ms / 1000) / 60
+            );
+            let secs = Math.floor(
+              (Math.floor(track.track.duration_ms / 1000) / 60 - mins) * 60
+            );
+            if (secs < 10) {
+              secs = "0" + secs;
+            }
+
             return (
               <div className="group grid grid-cols-8 py-3 px-3 hover:bg-[#51515169] items-center duration-200 rounded-lg">
                 <div className=" flex items-center text-base  w-full max-w-md text-ellipsis truncate col-span-3 relative">
@@ -43,7 +58,11 @@ export default function PlaylistBody() {
                     alt=""
                     className="relative rounded-md w-[12%] mr-5 group-hover:-z-2"
                   />
-                  <PlayMusicIcon setPlayer={setPlayer} track={track} />
+                  <PlayMusicIcon
+                    setPlayer={setPlayer}
+                    track={track}
+                    playTrack={playTrack}
+                  />
                   <p className="text-base   max-w-md text-ellipsis truncate">
                     <p>{track.track.name}</p>
                     <p className="text-[12px] text-gray-400">
@@ -58,7 +77,9 @@ export default function PlaylistBody() {
                   <p className="text-base ">{track.added_at.substr(0, 10)}</p>
                 </div>
                 <div>
-                  <p className="text-base  text-start ">0:30</p>
+                  <p className="text-base  text-start ">
+                    {mins}:{secs}
+                  </p>
                 </div>
               </div>
             );
@@ -80,7 +101,10 @@ export default function PlaylistBody() {
         />
       )}
       {tracksToDisplay ? (
-        <div className="w-11/12 h-100 text-white mt-10 absolute right-0 pb-16 pl-10 bg-[#2C2E3A] bg-gradient-to-r from-[rgba(0,0,0,0.7087885154061625)] from-50% to-[rgba(14,2,28,0.9529061624649859)]">
+        <div
+          style={containerStyles}
+          className="w-11/12 h-100 text-white mt-10 absolute right-0 pb-16 pl-10 bg-[#2C2E3A] bg-gradient-to-r from-[rgba(0,0,0,0.7087885154061625)] from-50% to-[rgba(14,2,28,0.9529061624649859)]"
+        >
           <div className="text-2xl text-white font-sans w-[95%]">
             <div className="flex items-center">
               <img src={images[0].url} alt="" className="w-1/6 pb-10" />
