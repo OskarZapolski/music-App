@@ -1,4 +1,4 @@
-export default function StartMusicIcon({ setIsPlaying }) {
+export default function StartMusicIcon({ setIsPlaying, resumePlaying }) {
   return (
     <svg
       fill="#000000"
@@ -9,7 +9,10 @@ export default function StartMusicIcon({ setIsPlaying }) {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 459 459"
       className="fill-white hover:scale-110 duration-150"
-      onClick={() => setIsPlaying(true)}
+      onClick={() => {
+        setIsPlaying(true);
+        resumePlaying();
+      }}
     >
       <g>
         <g>

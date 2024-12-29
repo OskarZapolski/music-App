@@ -11,15 +11,14 @@ export default function PlaylistBody() {
   const [tracksArr, setTracksArr] = useState();
   const [tracksToDisplay, setTracksToDisplay] = useState();
   const [player, setPlayer] = useContext(playerContext);
-  const playTrack = useContext(palyTrackFunctionContext);
+  const [playTrack, stopPlaying, resumePlaying] = useContext(
+    palyTrackFunctionContext
+  );
 
   const accessToken = localStorage.getItem("token");
 
   const { id, name, images, tracksUrl } = useLocation().state;
-  //fix styles
-  const containerStyles = {
-    paddingBottom: player ? "20vh" : "4rem",
-  };
+
   useEffect(() => {
     function fetchTracks() {
       fetch(tracksUrl, {
@@ -34,7 +33,6 @@ export default function PlaylistBody() {
     return fetchTracks;
   }, []);
 
-  //zainstaluj webkit scrollbar do stylow scroll
   useEffect(() => {
     function displayTrackData() {
       if (tracksArr) {
@@ -98,13 +96,12 @@ export default function PlaylistBody() {
           name={player.name}
           artist={player.artist}
           preview_url={player.preview_url}
+          stopPlaying={stopPlaying}
+          resumePlaying={resumePlaying}
         />
       )}
       {tracksToDisplay ? (
-        <div
-          style={containerStyles}
-          className="w-11/12 h-100 text-white mt-10 absolute right-0 pb-16 pl-10 bg-[#2C2E3A] bg-gradient-to-r from-[rgba(0,0,0,0.7087885154061625)] from-50% to-[rgba(14,2,28,0.9529061624649859)]"
-        >
+        <div className="w-11/12 h-fit text-white mt-10 absolute right-0 pb-10 pl-10 bg-[#2C2E3A] bg-gradient-to-r from-[rgba(0,0,0,0.7087885154061625)] from-50% to-[rgba(14,2,28,0.9529061624649859)]">
           <div className="text-2xl text-white font-sans w-[95%]">
             <div className="flex items-center">
               <img src={images[0].url} alt="" className="w-1/6 pb-10" />
@@ -112,16 +109,7 @@ export default function PlaylistBody() {
                 {name}
               </h1>
             </div>
-            {/* <table className=" border-separate border-spacing-y-5 border-transparent w-full pr-10">
-            <tr>
-              <th className="text-left">title</th>
 
-              <th className="text-left">album</th>
-              <th>added at</th>
-              <th>duration</th>
-            </tr>
-            {tracksToDisplay}
-          </table> */}
             <div className="grid grid-cols-8 gap-y-4 px-3">
               <h2 className="col-span-3 ">title</h2>
               <h2 className="col-span-2">album</h2>

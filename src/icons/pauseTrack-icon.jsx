@@ -1,4 +1,4 @@
-export default function PauseTrackIcon({ setIsPlaying }) {
+export default function PauseTrackIcon({ setIsPlaying, stopPlaying }) {
   return (
     <svg
       fill="#000000"
@@ -9,7 +9,10 @@ export default function PauseTrackIcon({ setIsPlaying }) {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 39.989 39.989"
       className="fill-slate-100 hover:scale-110 duration-150"
-      onClick={() => setIsPlaying(false)}
+      onClick={() => {
+        setIsPlaying(false);
+        stopPlaying();
+      }}
     >
       <path
         id="XMLID_148_"

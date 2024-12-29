@@ -37,7 +37,18 @@ function App() {
   // playerSDKEventsHandler();
   useEffect(() => {
     const tokenSDK =
-      "BQDqGKeovwmu2XkJkiOqtaQr7tcWQ_tfMIwaup14L3Ki29vR4yUxoJzjakxgSC1vbQwY8TbWBLMKLIGWqHSwKEbhOM63s1Of4srpZlswALpODKMWKgtKnUxsucY21-AdfPFiQA4a2wBOFGw6sDrrfHVMQUIsUdG5XdVk3Bx9acWFrI_-h3zjN4xakLaW4eBB58Jp9v7WV8EG-oALAKEMGxGC7ajRpQRuKBUz";
+      "BQCFJ1pMEnVYj0PyG4GqnVoVfPvIp6D-0dWxsSySUOiyCcdcl6gqVT7MdtANTYZuwp4DndBhElRIxjxTCCQrZlsUvsta4O2_y4a6HBazJzfRQkA9piXb-c7APXFMYCpB0rOAi_Bgdqbv9paok5RoKX9oyoQhMkiaO9whsAmzmJZxxjqsPJLFjNhEI4LdN96JVruxtBbucFkHQ8tu5oRhgG3mEN0BBdE8BWN9";
+    let playerCheckInterval;
+    function checkForPlayer() {
+      if (window.Spotify !== null) clearInterval(playerCheckInterval);
+    }
+    function handleLogin() {
+      if (!tokenSDK) {
+        playerCheckInterval = setInterval(() => checkForPlayer(), 1000);
+      }
+    }
+    handleLogin();
+
     window.onSpotifyWebPlaybackSDKReady = () => {
       const PLAYER = new window.Spotify.Player({
         name: "Web Playback SDK Quick Start Player",
@@ -51,9 +62,7 @@ function App() {
         console.log("not", device_id);
         setIsConnected(false);
       });
-      PLAYER.addListener("player_state_changed", (state) => {
-        console.log(state);
-      });
+      PLAYER.addListener("player_state_changed", (state) => {});
       PLAYER.addListener("ready", ({ device_id }) => {
         setDeviceId(device_id);
         setIsConnected(true);
@@ -108,6 +117,20 @@ function App() {
       console.error(err);
     }
   }
+  async function stopPlaying() {
+    try {
+      await playerSDK.pause();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  async function resumePlaying() {
+    try {
+      await playerSDK.resume();
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   // useEffect(() => {
   //   async function checkConnection() {
@@ -122,16 +145,24 @@ function App() {
   // }, [playerSDK]);
 
   console.log(playerSDK);
+  const containerStyles = {
+    height: player ? "88vh" : "full",
+  };
 
   console.log(isConnected);
   return (
     <div className="font-mono">
-      <div className="bg-black bg-gra h-screen w-screen flex overflow-x-hidden relative scrollbar scrollbar-thumb-gray-500 scrollbar-thumb-rounded-full scrollbar-track-transparent">
+      <div
+        style={containerStyles}
+        className="bg-black bg-gra h-screen w-screen flex overflow-x-hidden relative scrollbar scrollbar-thumb-gray-500 scrollbar-thumb-rounded-full scrollbar-track-transparent"
+      >
         {!token ? (
           <LogIn />
         ) : (
           <BrowserRouter>
-            <palyTrackFunctionContext.Provider value={playTrack}>
+            <palyTrackFunctionContext.Provider
+              value={[playTrack, stopPlaying, resumePlaying]}
+            >
               <playerContext.Provider value={[player, setPlayer]}>
                 <Routes>
                   <Route
