@@ -3,11 +3,11 @@ import { useLocation } from "react-router-dom";
 import Navbar from "./navbar";
 import PlayMusicIcon from "../icons/playMusic-icon";
 import Player from "./player";
-import LoadingIcon from "./loadingIcon";
+import LoadingIcon from "../icons/loadingIcon";
 import { playerContext } from "../App";
 import { palyTrackFunctionContext } from "../App";
 
-export default function PlaylistBody() {
+export default function PlaylistBody({ setIsPlaying, isPlaying }) {
   const [tracksArr, setTracksArr] = useState();
   const [tracksToDisplay, setTracksToDisplay] = useState();
   const [player, setPlayer] = useContext(playerContext);
@@ -16,7 +16,7 @@ export default function PlaylistBody() {
   );
 
   const accessToken = localStorage.getItem("token");
-
+  // bug jest zwiazany z uselocation i nav w plylistIcon handle that
   const { id, name, images, tracksUrl } = useLocation().state;
 
   useEffect(() => {
@@ -87,6 +87,7 @@ export default function PlaylistBody() {
     }
     displayTrackData();
   }, [tracksArr]);
+  console.log(isPlaying);
   return (
     <>
       <Navbar />
@@ -98,6 +99,8 @@ export default function PlaylistBody() {
           preview_url={player.preview_url}
           stopPlaying={stopPlaying}
           resumePlaying={resumePlaying}
+          isPlaying={isPlaying}
+          setIsPlaying={setIsPlaying}
         />
       )}
       {tracksToDisplay ? (

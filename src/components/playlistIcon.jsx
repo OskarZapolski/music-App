@@ -8,6 +8,7 @@ export default function PlaylistIcon({
   name,
   images,
   tracksUrl,
+  isPlaying,
 }) {
   const nav = useNavigate();
   const setPlaylistToDisplay = useContext(playlistContext);
@@ -17,8 +18,15 @@ export default function PlaylistIcon({
       className="cursor-pointer"
       key={id}
       onClick={() => {
-        setPlaylistToDisplay({ id, name, images, tracksUrl });
-        nav("/playlist", { state: { id, name, images, tracksUrl } });
+        nav("/playlist", {
+          state: { id, name, images, tracksUrl, isPlaying },
+        });
+        setPlaylistToDisplay({
+          id,
+          name,
+          images,
+          tracksUrl,
+        });
       }}
     >
       <img src={images[0]?.url} alt={name} className="min-w-full" />

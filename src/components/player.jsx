@@ -3,19 +3,21 @@ import PreviousTrackIcon from "../icons/previousTrack-icon";
 import NextTrackIcon from "../icons/nextTrack-icon";
 import PauseTrackIcon from "../icons/pauseTrack-icon";
 import { useEffect, useState } from "react";
+
 export default function Player({
   img,
   name,
   artist,
   stopPlaying,
   resumePlaying,
+  isPlaying,
+  setIsPlaying,
 }) {
-  const [isPlaying, setIsPlaying] = useState(true);
-
+  console.log(isPlaying);
   useEffect(() => {
     setIsPlaying(true);
   }, [img]);
-  console.log(isPlaying);
+
   return (
     <div className="fixed bottom-0  lg:h-[15%] xl:h-[12%] w-full bg-stone-950 right-0 z-10 text-white font-sans grid grid-cols-3">
       <div className="mx-4 flex items-center h-full">

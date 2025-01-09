@@ -11,6 +11,7 @@ export default function PauseTrackIcon({ setIsPlaying, stopPlaying }) {
       className="fill-slate-100 hover:scale-110 duration-150"
       onClick={() => {
         setIsPlaying(false);
+
         stopPlaying();
       }}
     >

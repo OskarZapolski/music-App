@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import getPlaylist from "./getPlaylist";
 import MainContent from "./mainContent";
-import LoadingIcon from "./loadingIcon";
+import LoadingIcon from "../icons/loadingIcon";
 import Navbar from "./navbar";
 
 export default function Home({ token, clientId, secretId }) {

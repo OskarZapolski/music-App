@@ -14,6 +14,7 @@ function App() {
   const [playerSDK, setPlayerSDK] = useState();
   const [isConnected, setIsConnected] = useState(false);
   const [deviceId, setDeviceId] = useState();
+  const [isPlaying, setIsPlaying] = useState(true);
   const clientId = "aa11595a5869411eacc30f6af0af738d";
   const secretId = "3e867675d0254603a866f88d98ad3820";
 
@@ -37,7 +38,7 @@ function App() {
   // playerSDKEventsHandler();
   useEffect(() => {
     const tokenSDK =
-      "BQCFJ1pMEnVYj0PyG4GqnVoVfPvIp6D-0dWxsSySUOiyCcdcl6gqVT7MdtANTYZuwp4DndBhElRIxjxTCCQrZlsUvsta4O2_y4a6HBazJzfRQkA9piXb-c7APXFMYCpB0rOAi_Bgdqbv9paok5RoKX9oyoQhMkiaO9whsAmzmJZxxjqsPJLFjNhEI4LdN96JVruxtBbucFkHQ8tu5oRhgG3mEN0BBdE8BWN9";
+      "BQDcg7yxEgkFxZ9P86QI9vIVYmxErm6HapSthuXFUxxZpCvfAp3UeSenj1oFiQpMrrE-zdCHTHeheHoG_EEYnVA1xg9kCKn84M5XUUTxXUKnEZ_eBrKnTAsTgonjFTUhldhCejGHgCMKZMzLLonkv20ltWAhUgjaLeyKvZOpBjZUhqJRtlPR6JIe64eyoqtPXCkSpvzi5sOqwqHlAkPx0JvGCTwTF-v4ugO4";
     let playerCheckInterval;
     function checkForPlayer() {
       if (window.Spotify !== null) clearInterval(playerCheckInterval);
@@ -75,9 +76,9 @@ function App() {
         console.error("Account error:", message);
       });
 
-      PLAYER.addListener("playback_error", ({ message }) => {
-        console.error("Playback error:", message);
-      });
+      // PLAYER.addListener("playback_error", ({ message }) => {
+      //   console.error("Playback error:", message);
+      // });
       PLAYER.addListener("authentication_error", ({ message }) => {
         console.error("Authentication error:", message);
       });
@@ -93,9 +94,12 @@ function App() {
   }, [window.Spotify]);
 
   async function playTrack(trackUri) {
+    console.log(trackUri);
     const apiUrl = `https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`;
     const requestBody = {
       uris: [trackUri],
+
+      play: true,
     };
 
     try {
@@ -114,7 +118,7 @@ function App() {
         console.log("err");
       }
     } catch (err) {
-      console.error(err);
+      console.error(err, "eroor");
     }
   }
   async function stopPlaying() {
@@ -149,7 +153,7 @@ function App() {
     height: player ? "88vh" : "full",
   };
 
-  console.log(isConnected);
+  console.log(isPlaying);
   return (
     <div className="font-mono">
       <div
@@ -163,7 +167,9 @@ function App() {
             <palyTrackFunctionContext.Provider
               value={[playTrack, stopPlaying, resumePlaying]}
             >
-              <playerContext.Provider value={[player, setPlayer]}>
+              <playerContext.Provider
+                value={[player, setPlayer, isPlaying, setIsPlaying]}
+              >
                 <Routes>
                   <Route
                     path="/"
@@ -176,7 +182,15 @@ function App() {
                     }
                   />
 
-                  <Route path="/playlist" element={<PlaylistBody />} />
+                  <Route
+                    path="/playlist"
+                    element={
+                      <PlaylistBody
+                        setIsPlaying={setIsPlaying}
+                        isPlaying={isPlaying}
+                      />
+                    }
+                  />
                 </Routes>
               </playerContext.Provider>
             </palyTrackFunctionContext.Provider>
