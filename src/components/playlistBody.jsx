@@ -7,7 +7,12 @@ import LoadingIcon from "../icons/loadingIcon";
 import { playerContext } from "../App";
 import { palyTrackFunctionContext } from "../App";
 
-export default function PlaylistBody({ setIsPlaying, isPlaying }) {
+export default function PlaylistBody({
+  setIsPlaying,
+  isPlaying,
+  setPrevUrl,
+  prevUrl,
+}) {
   const [tracksArr, setTracksArr] = useState();
   const [tracksToDisplay, setTracksToDisplay] = useState();
   const [player, setPlayer] = useContext(playerContext);
@@ -16,7 +21,7 @@ export default function PlaylistBody({ setIsPlaying, isPlaying }) {
   );
 
   const accessToken = localStorage.getItem("token");
-  // bug jest zwiazany z uselocation i nav w plylistIcon handle that
+
   const { id, name, images, tracksUrl } = useLocation().state;
 
   useEffect(() => {
@@ -60,6 +65,7 @@ export default function PlaylistBody({ setIsPlaying, isPlaying }) {
                     setPlayer={setPlayer}
                     track={track}
                     playTrack={playTrack}
+                    setPrevUrl={setPrevUrl}
                   />
                   <p className="text-base   max-w-md text-ellipsis truncate">
                     <p>{track.track.name}</p>
@@ -87,10 +93,10 @@ export default function PlaylistBody({ setIsPlaying, isPlaying }) {
     }
     displayTrackData();
   }, [tracksArr]);
-  console.log(isPlaying);
+
   return (
     <>
-      <Navbar />
+      <Navbar isPlaying={isPlaying} setPrevUrl={setPrevUrl} prevUrl={prevUrl} />
       {player && (
         <Player
           img={player.img}
@@ -101,6 +107,7 @@ export default function PlaylistBody({ setIsPlaying, isPlaying }) {
           resumePlaying={resumePlaying}
           isPlaying={isPlaying}
           setIsPlaying={setIsPlaying}
+          prevUrl={prevUrl}
         />
       )}
       {tracksToDisplay ? (
@@ -114,10 +121,10 @@ export default function PlaylistBody({ setIsPlaying, isPlaying }) {
             </div>
 
             <div className="grid grid-cols-8 gap-y-4 px-3">
-              <h2 className="col-span-3 ">title</h2>
-              <h2 className="col-span-2">album</h2>
-              <h2 className="col-span-2">added at</h2>
-              <h2 className="text-start">duration</h2>
+              <h2 className="col-span-3 text-sm">Title</h2>
+              <h2 className="col-span-2 text-sm">Album</h2>
+              <h2 className="col-span-2 text-sm">Added at</h2>
+              <h2 className="text-start text-sm">Duration</h2>
               <hr className="col-span-8 mb-5" />
             </div>
             {tracksToDisplay}

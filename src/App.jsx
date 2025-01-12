@@ -1,7 +1,7 @@
 import { useEffect, useState, createContext } from "react";
 import "./App.css";
 import LogIn from "./components/login";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Home from "./components/home";
 import PlaylistBody from "./components/playlistBody";
 
@@ -15,8 +15,10 @@ function App() {
   const [isConnected, setIsConnected] = useState(false);
   const [deviceId, setDeviceId] = useState();
   const [isPlaying, setIsPlaying] = useState(true);
+  const [prevUrl, setPrevUrl] = useState("/");
   const clientId = "aa11595a5869411eacc30f6af0af738d";
   const secretId = "3e867675d0254603a866f88d98ad3820";
+  console.log(prevUrl);
 
   useEffect(() => {
     const token = window.localStorage.getItem("token");
@@ -38,7 +40,7 @@ function App() {
   // playerSDKEventsHandler();
   useEffect(() => {
     const tokenSDK =
-      "BQDcg7yxEgkFxZ9P86QI9vIVYmxErm6HapSthuXFUxxZpCvfAp3UeSenj1oFiQpMrrE-zdCHTHeheHoG_EEYnVA1xg9kCKn84M5XUUTxXUKnEZ_eBrKnTAsTgonjFTUhldhCejGHgCMKZMzLLonkv20ltWAhUgjaLeyKvZOpBjZUhqJRtlPR6JIe64eyoqtPXCkSpvzi5sOqwqHlAkPx0JvGCTwTF-v4ugO4";
+      "BQDu36KWYOossqowXVUywTfx1-ZMWSV2Kfw7WM88WLl0X6ZuFCSpE_pNK9gu8TawUvMTe4vf8x0eHM5ceLz6qaPcRwOsI2WYIMcTC3g9qkqpXJKau7qkqNSdoYFJ7vMxD4keuF33neAqSMKqte1pA1AIiqJ8HTV7MkHxBRPRQqNKUcHRFt5lVyK8GvSlDOu6iHV_EUOlMRvdbuw2jNz2EaHzHwx0r4J_EtAl";
     let playerCheckInterval;
     function checkForPlayer() {
       if (window.Spotify !== null) clearInterval(playerCheckInterval);
@@ -148,7 +150,6 @@ function App() {
   //   checkConnection();
   // }, [playerSDK]);
 
-  console.log(playerSDK);
   const containerStyles = {
     height: player ? "88vh" : "full",
   };
@@ -168,7 +169,14 @@ function App() {
               value={[playTrack, stopPlaying, resumePlaying]}
             >
               <playerContext.Provider
-                value={[player, setPlayer, isPlaying, setIsPlaying]}
+                value={[
+                  player,
+                  setPlayer,
+                  isPlaying,
+                  setIsPlaying,
+                  setPrevUrl,
+                  prevUrl,
+                ]}
               >
                 <Routes>
                   <Route
@@ -178,6 +186,7 @@ function App() {
                         token={token}
                         clientId={clientId}
                         secretId={secretId}
+                        isPlaying={isPlaying}
                       />
                     }
                   />
@@ -188,6 +197,8 @@ function App() {
                       <PlaylistBody
                         setIsPlaying={setIsPlaying}
                         isPlaying={isPlaying}
+                        prevUrl={prevUrl}
+                        setPrevUrl={setPrevUrl}
                       />
                     }
                   />

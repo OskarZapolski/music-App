@@ -3,6 +3,7 @@ import PreviousTrackIcon from "../icons/previousTrack-icon";
 import NextTrackIcon from "../icons/nextTrack-icon";
 import PauseTrackIcon from "../icons/pauseTrack-icon";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 export default function Player({
   img,
@@ -12,10 +13,14 @@ export default function Player({
   resumePlaying,
   isPlaying,
   setIsPlaying,
+  prevUrl,
 }) {
-  console.log(isPlaying);
+  const location = useLocation().pathname;
   useEffect(() => {
-    setIsPlaying(true);
+    console.log(1);
+    if (location == prevUrl) {
+      setIsPlaying(true);
+    }
   }, [img]);
 
   return (

@@ -1,4 +1,12 @@
-export default function PlayMusicIcon({ setPlayer, track, playTrack }) {
+import { useLocation } from "react-router-dom";
+
+export default function PlayMusicIcon({
+  setPlayer,
+  track,
+  playTrack,
+  setPrevUrl,
+}) {
+  const location = useLocation();
   return (
     <svg
       className="hidden group-hover:block fill-white absolute group-hover:bg-[#000000b8] p-[6px]"
@@ -10,6 +18,7 @@ export default function PlayMusicIcon({ setPlayer, track, playTrack }) {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 60 60"
       onClick={() => {
+        setPrevUrl(location.pathname);
         setPlayer({
           img: track.track.album.images[2].url,
           name: track.track.name,

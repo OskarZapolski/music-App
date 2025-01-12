@@ -1,9 +1,13 @@
-import { useNavigate } from "react-router-dom";
-export default function HomeIcon({ styles }) {
+import { useLocation, useNavigate } from "react-router-dom";
+export default function HomeIcon({ styles, isPlaying, setPrevUrl, prevUrl }) {
   const nav = useNavigate();
+  const location = useLocation();
   return (
     <svg
-      onClick={() => nav("/")}
+      onClick={() => {
+        setPrevUrl(location.pathname);
+        return nav("/", { state: { isPlaying } });
+      }}
       className={styles}
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"

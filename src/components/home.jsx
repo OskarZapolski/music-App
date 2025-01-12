@@ -5,7 +5,7 @@ import MainContent from "./mainContent";
 import LoadingIcon from "../icons/loadingIcon";
 import Navbar from "./navbar";
 
-export default function Home({ token, clientId, secretId }) {
+export default function Home({ token, clientId, secretId, isPlaying }) {
   const [randomPlaylists, setRandomPlaylists] = useState([]);
   const categories = ["chill vibes", "pop", "rap", "rock"];
 
@@ -57,7 +57,7 @@ export default function Home({ token, clientId, secretId }) {
 
   return (
     <>
-      <Navbar />
+      <Navbar isPlaying={isPlaying} />
 
       {randomPlaylists ? (
         <>

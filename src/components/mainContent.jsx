@@ -12,7 +12,7 @@ export default function MainContent({ playlists, categories }) {
   const token = localStorage.getItem("token");
 
   const [playlistsTodisplay, setPlaylistsToDisplay] = useState();
-  const [player, setPlayer, isPlaying, setIsPlaying] =
+  const [player, setPlayer, isPlaying, setIsPlaying, setPrevUrl, prevUrl] =
     useContext(playerContext);
   const [searchedTracks, setSearchedTracks] = useState();
   const [searchInputValue, setSearchInputValue] = useState("");
@@ -20,7 +20,7 @@ export default function MainContent({ playlists, categories }) {
   const [playTrack, stopPlaying, resumePlaying] = useContext(
     palyTrackFunctionContext
   );
-
+  console.log(searchInputValue);
   useEffect(() => {
     const url = `https://api.spotify.com/v1/search?q=${encodeURIComponent(
       searchInputValue
@@ -71,6 +71,7 @@ export default function MainContent({ playlists, categories }) {
             images={playlist.images}
             isPlaying={isPlaying}
             setIsPlaying={setIsPlaying}
+            setPrevUrl={setPrevUrl}
           />
         );
       } else {
@@ -80,16 +81,15 @@ export default function MainContent({ playlists, categories }) {
       }
     })
   );
-  console.log(setIsPlaying);
+
   const style = {
     height: !player && "100%",
   };
   const inputStyle = {
-    borderBottomLeftRadius: searchedTracks ? "0" : "1.5rem",
-    borderBottomRightRadius: searchedTracks ? "0" : "1.5rem",
+    borderBottomLeftRadius: searchInputValue ? "0" : "1.5rem",
+    borderBottomRightRadius: searchInputValue ? "0" : "1.5rem",
   };
-  console.log(searchedTracks);
-  console.log(isPlaying);
+  console.log(player);
   return (
     <>
       {!playlistsTodisplay ? (
@@ -106,7 +106,7 @@ export default function MainContent({ playlists, categories }) {
                   onChange={(e) => setSearchInputValue(e.target.value)}
                 />
                 <div className="relative w-full  text-white text-lg focus:outline-none ">
-                  {searchedTracks && (
+                  {searchInputValue && (
                     <div className="absolute w-1/2 rounded-bl-2xl rounded-br-2xl p-2 bg-zinc-800  left-1/2 transform -translate-x-1/2 ">
                       {searchedTracksArr}
                     </div>
