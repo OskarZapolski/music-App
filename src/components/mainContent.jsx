@@ -4,7 +4,7 @@ import PlaylistBody from "./playlistBody";
 import Player from "./player";
 import { playerContext } from "../App";
 import SearchedTrack from "./searchedTrack";
-import { palyTrackFunctionContext } from "../App";
+import { playTrackFunctionContext } from "../App";
 
 export const playlistContext = createContext();
 
@@ -18,7 +18,7 @@ export default function MainContent({ playlists, categories }) {
   const [searchInputValue, setSearchInputValue] = useState("");
   const [searchedTracksArr, setSearchedTrackArr] = useState([]);
   const [playTrack, stopPlaying, resumePlaying] = useContext(
-    palyTrackFunctionContext
+    playTrackFunctionContext
   );
   console.log(searchInputValue);
   useEffect(() => {
@@ -140,6 +140,7 @@ export default function MainContent({ playlists, categories }) {
           resumePlaying={resumePlaying}
           isPlaying={isPlaying}
           setIsPlaying={setIsPlaying}
+          duration={player.duraion}
         />
       )}
     </>

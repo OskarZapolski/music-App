@@ -7,6 +7,7 @@ export default function PlayMusicIcon({
   setPrevUrl,
 }) {
   const location = useLocation();
+
   return (
     <svg
       className="hidden group-hover:block fill-white absolute group-hover:bg-[#000000b8] p-[6px]"
@@ -24,6 +25,7 @@ export default function PlayMusicIcon({
           name: track.track.name,
           artist: track.track.artists[0].name,
           preview_url: track.track.preview_url,
+          duration: track.track.duration_ms,
         });
         playTrack(track.track.uri);
       }}

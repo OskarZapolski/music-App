@@ -6,7 +6,7 @@ import Home from "./components/home";
 import PlaylistBody from "./components/playlistBody";
 
 export const playerContext = createContext();
-export const palyTrackFunctionContext = createContext();
+export const playTrackFunctionContext = createContext();
 
 function App() {
   const [token, setToken] = useState("");
@@ -16,8 +16,10 @@ function App() {
   const [deviceId, setDeviceId] = useState();
   const [isPlaying, setIsPlaying] = useState(true);
   const [prevUrl, setPrevUrl] = useState("/");
+  const [playBackTime, setPlayBackTime] = useState(0);
   const clientId = "aa11595a5869411eacc30f6af0af738d";
   const secretId = "3e867675d0254603a866f88d98ad3820";
+
   console.log(prevUrl);
 
   useEffect(() => {
@@ -40,7 +42,7 @@ function App() {
   // playerSDKEventsHandler();
   useEffect(() => {
     const tokenSDK =
-      "BQDu36KWYOossqowXVUywTfx1-ZMWSV2Kfw7WM88WLl0X6ZuFCSpE_pNK9gu8TawUvMTe4vf8x0eHM5ceLz6qaPcRwOsI2WYIMcTC3g9qkqpXJKau7qkqNSdoYFJ7vMxD4keuF33neAqSMKqte1pA1AIiqJ8HTV7MkHxBRPRQqNKUcHRFt5lVyK8GvSlDOu6iHV_EUOlMRvdbuw2jNz2EaHzHwx0r4J_EtAl";
+      "BQBb9nfrIbEic127_15yhEY0NkG809b87rMEZsJ_oGCu9WGbWij7xtq76510xbKhQxtLYGMUtPR5eTaqxfRR5A8Gp9z9an3JKr7li1_Ck7f6LAXHBzLZbykmki9vh5IDJQ0H8SPr_ZUNBNPevu0dYWBVSrNQbBtAQUEEJCu7Ta5YpArSA6L9go0pSCp9YBbqw55gBQzak8d48qGyhxaVTnPvwuwdZQb8nNWx";
     let playerCheckInterval;
     function checkForPlayer() {
       if (window.Spotify !== null) clearInterval(playerCheckInterval);
@@ -88,6 +90,7 @@ function App() {
       PLAYER.connect();
       setPlayerSDK(PLAYER);
     };
+
     return () => {
       if (playerSDK) {
         playerSDK.disconnect();
@@ -122,7 +125,25 @@ function App() {
     } catch (err) {
       console.error(err, "eroor");
     }
+    // playerSDK.getCurrentState().then((state) => console.log(state));
+    //to musisz zaimplementowac aby miec curent time of song
   }
+
+  useEffect(() => {
+    function getPlaybackTime() {
+      if (!playerSDK) return;
+      const interval = setInterval(async () => {
+        const state = await playerSDK.getCurrentState();
+        if (state && !state.paused) {
+          setPlayBackTime(state.position);
+        }
+      }, 1000);
+      if (!isPlaying) clearInterval(interval);
+      return () => clearInterval(interval);
+    }
+    getPlaybackTime();
+  }, [playerSDK]);
+
   async function stopPlaying() {
     try {
       await playerSDK.pause();
@@ -137,7 +158,7 @@ function App() {
       console.error(err);
     }
   }
-
+  console.log(playBackTime);
   // useEffect(() => {
   //   async function checkConnection() {
   //     try {
@@ -165,7 +186,7 @@ function App() {
           <LogIn />
         ) : (
           <BrowserRouter>
-            <palyTrackFunctionContext.Provider
+            <playTrackFunctionContext.Provider
               value={[playTrack, stopPlaying, resumePlaying]}
             >
               <playerContext.Provider
@@ -176,6 +197,7 @@ function App() {
                   setIsPlaying,
                   setPrevUrl,
                   prevUrl,
+                  playBackTime,
                 ]}
               >
                 <Routes>
@@ -204,7 +226,7 @@ function App() {
                   />
                 </Routes>
               </playerContext.Provider>
-            </palyTrackFunctionContext.Provider>
+            </playTrackFunctionContext.Provider>
           </BrowserRouter>
         )}
       </div>

@@ -2,8 +2,9 @@ import StartMusicIcon from "../icons/startMusic-icon";
 import PreviousTrackIcon from "../icons/previousTrack-icon";
 import NextTrackIcon from "../icons/nextTrack-icon";
 import PauseTrackIcon from "../icons/pauseTrack-icon";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import ProgerssBar from "./progerssBar";
 
 export default function Player({
   img,
@@ -14,10 +15,10 @@ export default function Player({
   isPlaying,
   setIsPlaying,
   prevUrl,
+  duration,
 }) {
   const location = useLocation().pathname;
   useEffect(() => {
-    console.log(1);
     if (location == prevUrl) {
       setIsPlaying(true);
     }
@@ -50,6 +51,7 @@ export default function Player({
           )}
           <NextTrackIcon />
         </div>
+        <ProgerssBar duration={duration} />
       </div>
     </div>
   );
