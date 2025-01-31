@@ -140,7 +140,7 @@ export default function MainContent({ playlists, categories }) {
           resumePlaying={resumePlaying}
           isPlaying={isPlaying}
           setIsPlaying={setIsPlaying}
-          duration={player.duraion}
+          duration={player.duration}
         />
       )}
     </>

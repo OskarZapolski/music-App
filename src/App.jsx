@@ -42,7 +42,7 @@ function App() {
   // playerSDKEventsHandler();
   useEffect(() => {
     const tokenSDK =
-      "BQBb9nfrIbEic127_15yhEY0NkG809b87rMEZsJ_oGCu9WGbWij7xtq76510xbKhQxtLYGMUtPR5eTaqxfRR5A8Gp9z9an3JKr7li1_Ck7f6LAXHBzLZbykmki9vh5IDJQ0H8SPr_ZUNBNPevu0dYWBVSrNQbBtAQUEEJCu7Ta5YpArSA6L9go0pSCp9YBbqw55gBQzak8d48qGyhxaVTnPvwuwdZQb8nNWx";
+      "BQB-FcLuIZ6Cm-sC27QA1pbPh2dbpsAzLxEqHGaDprcQl1EEycOte-TCSLqPl4UPG31Sbm8a_QwqOBPG50DL6de0_2k5rjKn-AL0jQf4AVyZoC9g0bLZBGTHmHka81klMgei0MXnN1fLJDUSxrDnJqzQigO3_sJsTstXZkKINz2sYcu9xy8K1MUiGwbj380GGFFgMviGXb3fgG-BjbzCiOyUIiz02zLkmdQBrzfxR7ZGCYRtbUqx87IK4Aeh";
     let playerCheckInterval;
     function checkForPlayer() {
       if (window.Spotify !== null) clearInterval(playerCheckInterval);
