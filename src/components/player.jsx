@@ -53,6 +53,11 @@ export default function Player({
         </div>
         <ProgerssBar duration={duration} />
       </div>
+      <div className="flex  justify-end items-center pr-10">
+        <div className=" w-1/3 h-2 relative">
+          <hr className=" w-full h-full bg-zinc-600 border-zinc-600 rounded-2xl" />
+        </div>
+      </div>
     </div>
   );
 }

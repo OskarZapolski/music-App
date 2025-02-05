@@ -42,7 +42,7 @@ function App() {
   // playerSDKEventsHandler();
   useEffect(() => {
     const tokenSDK =
-      "BQB-FcLuIZ6Cm-sC27QA1pbPh2dbpsAzLxEqHGaDprcQl1EEycOte-TCSLqPl4UPG31Sbm8a_QwqOBPG50DL6de0_2k5rjKn-AL0jQf4AVyZoC9g0bLZBGTHmHka81klMgei0MXnN1fLJDUSxrDnJqzQigO3_sJsTstXZkKINz2sYcu9xy8K1MUiGwbj380GGFFgMviGXb3fgG-BjbzCiOyUIiz02zLkmdQBrzfxR7ZGCYRtbUqx87IK4Aeh";
+      "BQCma1pP6JLYiXsqH60jVrweQTZNtxodvL7l1x5GNGlEIIhNs7Hf7OwELHAT83sXqkjah7Be0rjxAEmeQ-y8zoVg5EtgLsjVUm48FO4RXrHwjqwcSWrSOMdfQwBeUVXW1nKhCwE_P_evAuOQSWjLviJyu9e8S1GBBa1FhEMoTlUvkUraut0-lmNAdweqcQ2CQJ_6biEVwMiYGhRP9y0egQPrc5FNlSU32nw9DfbFBMsZ3wwK5k56O86oe45v";
     let playerCheckInterval;
     function checkForPlayer() {
       if (window.Spotify !== null) clearInterval(playerCheckInterval);
@@ -158,7 +158,7 @@ function App() {
       console.error(err);
     }
   }
-  console.log(playBackTime);
+
   // useEffect(() => {
   //   async function checkConnection() {
   //     try {
@@ -175,7 +175,6 @@ function App() {
     height: player ? "88vh" : "full",
   };
 
-  console.log(isPlaying);
   return (
     <div className="font-mono">
       <div
@@ -198,6 +197,8 @@ function App() {
                   setPrevUrl,
                   prevUrl,
                   playBackTime,
+                  setPlayBackTime,
+                  playerSDK,
                 ]}
               >
                 <Routes>
