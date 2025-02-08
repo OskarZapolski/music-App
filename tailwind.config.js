@@ -4,5 +4,10 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [require("tailwind-scrollbar")],
+  plugins: [
+    require("tailwind-scrollbar"),
+    require("tailwindcss/plugin")(({ addVariant }) => {
+      addVariant("search-cancel", "&::-webkit-search-cancel-button");
+    }),
+  ],
 };

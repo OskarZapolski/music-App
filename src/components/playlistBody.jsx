@@ -7,6 +7,8 @@ import LoadingIcon from "../icons/loadingIcon";
 import { playerContext } from "../App";
 import { playTrackFunctionContext } from "../App";
 import Track from "./track";
+import { searchContext } from "../App";
+import SearchMenu from "./searchMenu";
 
 export default function PlaylistBody({
   setIsPlaying,
@@ -20,6 +22,14 @@ export default function PlaylistBody({
   const [playTrack, stopPlaying, resumePlaying] = useContext(
     playTrackFunctionContext
   );
+  const [
+    searchedTracks,
+    setSearchedTracks,
+    searchInputValue,
+    setSearchInputValue,
+    searchedTracksArr,
+    setSearchedTrackArr,
+  ] = useContext(searchContext);
 
   const accessToken = localStorage.getItem("token");
 
@@ -59,6 +69,13 @@ export default function PlaylistBody({
     displayTrackData();
   }, [tracksArr]);
 
+  const inputStyle = {
+    borderBottomLeftRadius: searchInputValue ? "0" : "1.5rem",
+    borderBottomRightRadius: searchInputValue ? "0" : "1.5rem",
+  };
+  const stylePostion = {
+    position: "static",
+  };
   return (
     <>
       <Navbar isPlaying={isPlaying} setPrevUrl={setPrevUrl} prevUrl={prevUrl} />
@@ -77,25 +94,34 @@ export default function PlaylistBody({
         />
       )}
       {tracksToDisplay ? (
-        <div className="w-11/12 h-fit text-white mt-10 absolute right-0 pb-10 pl-10 bg-[#2C2E3A] bg-gradient-to-r from-[rgba(0,0,0,0.7087885154061625)] from-50% to-[rgba(14,2,28,0.9529061624649859)]">
-          <div className="text-2xl text-white font-sans w-[95%]">
-            <div className="flex items-center">
-              <img src={images[0].url} alt="" className="w-1/6 pb-10" />
-              <h1 className="ml-10 text-6xl font-bold text-ellipsis truncate">
-                {name}
-              </h1>
-            </div>
+        <>
+          <SearchMenu
+            inputStyle={inputStyle}
+            searchInputValue={searchInputValue}
+            setSearchInputValue={setSearchInputValue}
+            searchedTracksArr={searchedTracksArr}
+            stylePos={stylePostion}
+          />
+          <div className="w-11/12 h-fit text-white mt-10 absolute right-0 pb-10 pl-10 bg-[#2C2E3A] bg-gradient-to-r from-[rgba(0,0,0,0.7087885154061625)] from-50% to-[rgba(14,2,28,0.9529061624649859)] pt-20">
+            <div className="text-2xl text-white font-sans w-[95%] ">
+              <div className="flex items-center">
+                <img src={images[0].url} alt="" className="w-1/6 pb-10" />
+                <h1 className="ml-10 text-6xl font-bold text-ellipsis truncate">
+                  {name}
+                </h1>
+              </div>
 
-            <div className="grid grid-cols-8 gap-y-4 px-3">
-              <h2 className="col-span-3 text-sm">Title</h2>
-              <h2 className="col-span-2 text-sm">Album</h2>
-              <h2 className="col-span-2 text-sm">Added at</h2>
-              <h2 className="text-start text-sm">Duration</h2>
-              <hr className="col-span-8 mb-5" />
+              <div className="grid grid-cols-8 gap-y-4 px-3">
+                <h2 className="col-span-3 text-sm">Title</h2>
+                <h2 className="col-span-2 text-sm">Album</h2>
+                <h2 className="col-span-2 text-sm">Added at</h2>
+                <h2 className="text-start text-sm">Duration</h2>
+                <hr className="col-span-8 mb-5" />
+              </div>
+              {tracksToDisplay}
             </div>
-            {tracksToDisplay}
           </div>
-        </div>
+        </>
       ) : (
         <LoadingIcon />
       )}

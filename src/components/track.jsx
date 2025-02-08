@@ -16,7 +16,7 @@ export default function Track({ track, setPlayer, setPrevUrl, playTrack }) {
         />
         <PlayMusicIcon
           setPlayer={setPlayer}
-          track={track}
+          track={track.track}
           playTrack={playTrack}
           setPrevUrl={setPrevUrl}
         />
