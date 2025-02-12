@@ -2,9 +2,11 @@ import StartMusicIcon from "../icons/startMusic-icon";
 import PreviousTrackIcon from "../icons/previousTrack-icon";
 import NextTrackIcon from "../icons/nextTrack-icon";
 import PauseTrackIcon from "../icons/pauseTrack-icon";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import ProgerssBar from "./progerssBar";
+import LoudSpeakerIcon from "../icons/loudSpeaker-icon";
+import { playerContext } from "../App";
 
 export default function Player({
   img,
@@ -12,17 +14,41 @@ export default function Player({
   artist,
   stopPlaying,
   resumePlaying,
-  isPlaying,
-  setIsPlaying,
-  prevUrl,
+
   duration,
 }) {
+  const volumeBar = useRef();
   const location = useLocation().pathname;
+  const [volume, setVolume] = useState(0.3);
+
+  const [
+    player,
+    setPlayer,
+    isPlaying,
+    setIsPlaying,
+    setPrevUrl,
+    prevUrl,
+    playBackTime,
+    setPlayBackTime,
+    playerSDK,
+  ] = useContext(playerContext);
+
   useEffect(() => {
     if (location == prevUrl) {
       setIsPlaying(true);
     }
   }, [img]);
+
+  function changeVolume(e) {
+    setVolume(e.nativeEvent.offsetX / volumeBar.current.offsetWidth);
+    console.log();
+    playerSDK
+      .setVolume(e.nativeEvent.offsetX / volumeBar.current.offsetWidth)
+      .then((res) => console.log("changed"));
+  }
+  const volumeStyle = {
+    width: `${Math.floor(volume * 100)}%`,
+  };
 
   return (
     <div className="fixed bottom-0  lg:h-[15%] xl:h-[12%] w-full bg-stone-950 right-0 z-10 text-white font-sans grid grid-cols-3">
@@ -54,8 +80,18 @@ export default function Player({
         <ProgerssBar duration={duration} />
       </div>
       <div className="flex  justify-end items-center pr-10">
-        <div className=" w-1/3 h-2 relative">
-          <hr className=" w-full h-full bg-zinc-600 border-zinc-600 rounded-2xl" />
+        <LoudSpeakerIcon />
+        <div className=" w-1/4 h-2 relative">
+          <hr
+            ref={volumeBar}
+            className=" w-full h-full bg-zinc-600 border-zinc-600 rounded-2xl -z-10 cursor-pointer"
+            onClick={(e) => changeVolume(e)}
+          />
+          <hr
+            style={volumeStyle}
+            className="absolute z-10 h-full bg-white border-white rounded-2xl top-0 cursor-pointer"
+            onClick={(e) => changeVolume(e)}
+          />
         </div>
       </div>
     </div>

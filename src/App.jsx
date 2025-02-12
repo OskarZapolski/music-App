@@ -44,7 +44,7 @@ function App() {
   // playerSDKEventsHandler();
   useEffect(() => {
     const tokenSDK =
-      "BQAhfdqIFT24QKdQe7Che6bZ9mEojN84tNgGg9AmPzKWmQZJYIjv_ALwwiJ3yCxV5V-xl0M5nZ-FRSfBYSZnmNDlBQIJnqIEQ6O-qlQiVG1dRml8Mg8jkzInWzuTHxoYT5DDzc3Cxan1UgVudWz7eBFQvMt9AxdBNcB2LjZ_X4PZtaGwzZ1sKZ5pKVpIXHt-Bozw-Au4zoBIS17TfxJI5zZ8XF8yFPrx1C38Um640mODEl4wqoGBGitUMaYO";
+      "BQDsrrhSiIAcWjov-hwu3hIXAjA3L5SX6kHSkQ7AyDSW_gQ76qzxaMCGs_65xekeWTawW9us_2SKyWWA8Ak6RVr0Y4wOAdV1VH2fOAT4Az7XBsjH866dWIYHDbcVV3GlNYSUJYgiht_2dcd6QJRO1FnxQKuwtHcc3W4aeCNj2989oarOOPXIkqFjjgrf5tY7vm2SqCYSUTJQoOSmqDuo62roPCcvmvAK9_gHqO9RmRd8vZDSGEnkXLk6BzDn";
     let playerCheckInterval;
     function checkForPlayer() {
       if (window.Spotify !== null) clearInterval(playerCheckInterval);
@@ -62,7 +62,7 @@ function App() {
         getOAuthToken: (cb) => {
           cb(tokenSDK);
         },
-        volume: 1,
+        volume: 0.3,
       });
 
       PLAYER.addListener("not_ready", ({ device_id }) => {

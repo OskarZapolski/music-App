@@ -11,7 +11,7 @@ export default function SearchMenu({
         <input
           style={inputStyle}
           type="search"
-          className="w-1/2  bg-zinc-800 p-2 px-4 search-cancel:appearance-none rounded-3xl text-white text-lg focus:outline-none "
+          className="w-1/2  bg-zinc-800 p-2 px-4 search-cancel:appearance-none rounded-3xl text-white text-lg focus:outline-none font-sans"
           placeholder="Search"
           value={searchInputValue}
           onChange={(e) => setSearchInputValue(e.target.value)}
