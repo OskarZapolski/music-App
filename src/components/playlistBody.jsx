@@ -9,6 +9,7 @@ import { playTrackFunctionContext } from "../App";
 import Track from "./track";
 import { searchContext } from "../App";
 import SearchMenu from "./searchMenu";
+import { queueContext } from "../App";
 
 export default function PlaylistBody({
   setIsPlaying,
@@ -19,9 +20,11 @@ export default function PlaylistBody({
   const [tracksArr, setTracksArr] = useState();
   const [tracksToDisplay, setTracksToDisplay] = useState();
   const [player, setPlayer] = useContext(playerContext);
+
   const [playTrack, stopPlaying, resumePlaying] = useContext(
     playTrackFunctionContext
   );
+
   const [
     searchedTracks,
     setSearchedTracks,
@@ -51,15 +54,19 @@ export default function PlaylistBody({
 
   useEffect(() => {
     function displayTrackData() {
+      let id = -1;
       if (tracksArr) {
         setTracksToDisplay(
           tracksArr.map((track) => {
+            id++;
             return (
               <Track
                 track={track}
                 setPrevUrl={setPrevUrl}
                 setPlayer={setPlayer}
                 playTrack={playTrack}
+                id={id}
+                tracksArr={tracksArr}
               />
             );
           })
@@ -102,7 +109,12 @@ export default function PlaylistBody({
             searchedTracksArr={searchedTracksArr}
             stylePos={stylePostion}
           />
-          <div className="w-11/12 h-fit text-white mt-10 absolute right-0 pb-10 pl-10 bg-[#2C2E3A] bg-gradient-to-r from-[rgba(0,0,0,0.7087885154061625)] from-50% to-[rgba(14,2,28,0.9529061624649859)] pt-20">
+          <div
+            className="w-11/12 h-fit text-white mt-10 absolute right-0 pb-10 pl-10 bg-[#2C2E3A] bg-gradient-to-r from-[rgba(0,0,0,0.7087885154061625)] from-50% to-[rgba(14,2,28,0.9529061624649859)] pt-20"
+            onClick={() => {
+              if (searchInputValue) setSearchInputValue("");
+            }}
+          >
             <div className="text-2xl text-white font-sans w-[95%] ">
               <div className="flex items-center">
                 <img src={images[0].url} alt="" className="w-1/6 pb-10" />

@@ -1,5 +1,12 @@
 import PlayMusicIcon from "../icons/playMusic-icon";
-export default function Track({ track, setPlayer, setPrevUrl, playTrack }) {
+export default function Track({
+  track,
+  setPlayer,
+  setPrevUrl,
+  playTrack,
+  id,
+  tracksArr,
+}) {
   const mins = Math.floor(Math.floor(track.track.duration_ms / 1000) / 60);
   let secs = Math.floor((track.track.duration_ms / 1000) % 60);
   if (secs < 10) {
@@ -19,6 +26,8 @@ export default function Track({ track, setPlayer, setPrevUrl, playTrack }) {
           track={track.track}
           playTrack={playTrack}
           setPrevUrl={setPrevUrl}
+          id={id}
+          tracksArr={tracksArr}
         />
         <p className="text-base   max-w-md text-ellipsis truncate">
           <p>{track.track.name}</p>

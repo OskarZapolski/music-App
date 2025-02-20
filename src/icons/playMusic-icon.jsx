@@ -1,4 +1,6 @@
 import { useLocation } from "react-router-dom";
+import { queueContext } from "../App";
+import { useContext } from "react";
 
 export default function PlayMusicIcon({
   setPlayer,
@@ -6,9 +8,11 @@ export default function PlayMusicIcon({
   playTrack,
   setPrevUrl,
   style,
+  id,
+  tracksArr,
 }) {
   const location = useLocation();
-
+  const { setQueueFromCurrentPlaylist } = useContext(queueContext);
   return (
     <svg
       className="hidden group-hover:block fill-white absolute group-hover:bg-[#000000b8] p-[6px]"
@@ -30,6 +34,10 @@ export default function PlayMusicIcon({
           duration: track.duration_ms,
         });
         playTrack(track.uri);
+        if (id >= 0) {
+          console.log(id);
+          setQueueFromCurrentPlaylist(id, tracksArr);
+        }
       }}
     >
       <g>

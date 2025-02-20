@@ -9,6 +9,7 @@ import SearchedTrack from "./components/searchedTrack";
 export const playerContext = createContext();
 export const playTrackFunctionContext = createContext();
 export const searchContext = createContext();
+export const queueContext = createContext();
 
 function App() {
   const [token, setToken] = useState("");
@@ -22,6 +23,8 @@ function App() {
   const [searchedTracks, setSearchedTracks] = useState();
   const [searchInputValue, setSearchInputValue] = useState("");
   const [searchedTracksArr, setSearchedTrackArr] = useState([]);
+  const [playlistQueue, setPlaylistQueue] = useState([]);
+  const [queTrackIndex, setQueTrackIndex] = useState(0);
   const clientId = "aa11595a5869411eacc30f6af0af738d";
   const secretId = "3e867675d0254603a866f88d98ad3820";
 
@@ -40,11 +43,11 @@ function App() {
     }
     window.location.hash = "";
   }, []);
-
+  console.log(player);
   // playerSDKEventsHandler();
   useEffect(() => {
     const tokenSDK =
-      "BQDsrrhSiIAcWjov-hwu3hIXAjA3L5SX6kHSkQ7AyDSW_gQ76qzxaMCGs_65xekeWTawW9us_2SKyWWA8Ak6RVr0Y4wOAdV1VH2fOAT4Az7XBsjH866dWIYHDbcVV3GlNYSUJYgiht_2dcd6QJRO1FnxQKuwtHcc3W4aeCNj2989oarOOPXIkqFjjgrf5tY7vm2SqCYSUTJQoOSmqDuo62roPCcvmvAK9_gHqO9RmRd8vZDSGEnkXLk6BzDn";
+      "BQA4ZTa1JEqr6PvXeJ8UCRxrMyrxhrX01uVZ6vDkYK4B1gTx2j-6lbTkAab1PwVzVzB2cIdcCFP7rsWT7pn794ZUjQgLry28qWByIkaecgDvg1GwjdzwIG5yPTXuL9ueIhEtIcP7tMcV9-s5ubjDTXuV5gohp48B0dU_DlfEOCQmpqNqebEAp3uau0_17gjLhNJxiCu9ePaLHrP4xLThuKkKSVdtozNEHlE2lHnu1D2uipccu1QZQXwHpsyn";
     let playerCheckInterval;
     function checkForPlayer() {
       if (window.Spotify !== null) clearInterval(playerCheckInterval);
@@ -97,9 +100,24 @@ function App() {
       if (playerSDK) {
         playerSDK.disconnect();
       }
-    };
+    }; //153600
   }, [window.Spotify]);
-
+  console.log(queTrackIndex);
+  console.log(playlistQueue);
+  useEffect(() => {
+    if (player && playlistQueue && player.duration - playBackTime < 1000) {
+      playTrack(playlistQueue[queTrackIndex + 1].track.uri);
+      setPlayer({
+        img: playlistQueue[queTrackIndex + 1].track.album.images[2].url,
+        name: playlistQueue[queTrackIndex + 1].track.name,
+        artist: playlistQueue[queTrackIndex + 1].track.artists[0].name,
+        preview_url: playlistQueue[queTrackIndex + 1].track.preview_url,
+        duration: playlistQueue[queTrackIndex + 1].track.duration_ms,
+      });
+      setQueTrackIndex((prev) => (prev += 1));
+    }
+  }, [playBackTime]);
+  console.log(playlistQueue);
   async function playTrack(trackUri) {
     console.log(trackUri);
     const apiUrl = `https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`;
@@ -127,8 +145,6 @@ function App() {
     } catch (err) {
       console.error(err, "eroor");
     }
-    // playerSDK.getCurrentState().then((state) => console.log(state));
-    //to musisz zaimplementowac aby miec curent time of song
   }
 
   useEffect(() => {
@@ -214,6 +230,15 @@ function App() {
   //   checkConnection();
   // }, [playerSDK]);
 
+  function setQueueFromCurrentPlaylist(id, tracksArr) {
+    console.log(tracksArr);
+    if (id < tracksArr.length) {
+      const arr = tracksArr.slice(id);
+
+      setPlaylistQueue(arr);
+    }
+  }
+
   const containerStyles = {
     height: player ? "88vh" : "full",
   };
@@ -228,60 +253,62 @@ function App() {
           <LogIn />
         ) : (
           <BrowserRouter>
-            <searchContext.Provider
-              value={[
-                searchedTracks,
-                setSearchedTracks,
-                searchInputValue,
-                setSearchInputValue,
-                searchedTracksArr,
-                setSearchedTrackArr,
-              ]}
-            >
-              <playTrackFunctionContext.Provider
-                value={[playTrack, stopPlaying, resumePlaying]}
+            <queueContext.Provider value={{ setQueueFromCurrentPlaylist }}>
+              <searchContext.Provider
+                value={[
+                  searchedTracks,
+                  setSearchedTracks,
+                  searchInputValue,
+                  setSearchInputValue,
+                  searchedTracksArr,
+                  setSearchedTrackArr,
+                ]}
               >
-                <playerContext.Provider
-                  value={[
-                    player,
-                    setPlayer,
-                    isPlaying,
-                    setIsPlaying,
-                    setPrevUrl,
-                    prevUrl,
-                    playBackTime,
-                    setPlayBackTime,
-                    playerSDK,
-                  ]}
+                <playTrackFunctionContext.Provider
+                  value={[playTrack, stopPlaying, resumePlaying]}
                 >
-                  <Routes>
-                    <Route
-                      path="/"
-                      element={
-                        <Home
-                          token={token}
-                          clientId={clientId}
-                          secretId={secretId}
-                          isPlaying={isPlaying}
-                        />
-                      }
-                    />
+                  <playerContext.Provider
+                    value={[
+                      player,
+                      setPlayer,
+                      isPlaying,
+                      setIsPlaying,
+                      setPrevUrl,
+                      prevUrl,
+                      playBackTime,
+                      setPlayBackTime,
+                      playerSDK,
+                    ]}
+                  >
+                    <Routes>
+                      <Route
+                        path="/"
+                        element={
+                          <Home
+                            token={token}
+                            clientId={clientId}
+                            secretId={secretId}
+                            isPlaying={isPlaying}
+                          />
+                        }
+                      />
 
-                    <Route
-                      path="/playlist"
-                      element={
-                        <PlaylistBody
-                          setIsPlaying={setIsPlaying}
-                          isPlaying={isPlaying}
-                          prevUrl={prevUrl}
-                          setPrevUrl={setPrevUrl}
-                        />
-                      }
-                    />
-                  </Routes>
-                </playerContext.Provider>
-              </playTrackFunctionContext.Provider>
-            </searchContext.Provider>
+                      <Route
+                        path="/playlist"
+                        element={
+                          <PlaylistBody
+                            setIsPlaying={setIsPlaying}
+                            isPlaying={isPlaying}
+                            prevUrl={prevUrl}
+                            setPrevUrl={setPrevUrl}
+                          />
+                        }
+                      />
+                    </Routes>
+                  </playerContext.Provider>
+                </playTrackFunctionContext.Provider>
+              </searchContext.Provider>
+            </queueContext.Provider>
           </BrowserRouter>
         )}
       </div>

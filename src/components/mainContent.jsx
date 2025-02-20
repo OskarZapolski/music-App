@@ -28,9 +28,6 @@ export default function MainContent({ playlists, categories }) {
   const [playTrack, stopPlaying, resumePlaying] = useContext(
     playTrackFunctionContext
   );
-  console.log(searchInputValue);
-
-  console.log(searchedTracks);
 
   const arrOfplaylists = playlists.map((playlistsArr) =>
     playlistsArr.map((playlist) => {
@@ -65,7 +62,7 @@ export default function MainContent({ playlists, categories }) {
   const stylePostion = {
     position: "fixed",
   };
-  console.log(player);
+
   return (
     <>
       {!playlistsTodisplay ? (
@@ -82,6 +79,9 @@ export default function MainContent({ playlists, categories }) {
             <div
               style={style}
               className="relative h-full  w-full overflow-y-scroll scrollbar scrollbar-thumb-gray-500 scrollbar-thumb-rounded-full scrollbar-track-transparent top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 "
+              onClick={() => {
+                if (searchInputValue) setSearchInputValue("");
+              }}
             >
               <div className="w-11/12 mt-16 bg-[#2C2E3A] bg-gradient-to-r from-[rgba(0,0,0,0.7087885154061625)] from-50% to-[rgba(14,2,28,0.9529061624649859)] text-white grid grid-cols-4 gap-10  gap-y-10 rounded-2xl absolute right-0 pb-16 z-40 p-10">
                 {arrOfplaylists}
