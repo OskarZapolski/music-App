@@ -47,7 +47,7 @@ function App() {
   // playerSDKEventsHandler();
   useEffect(() => {
     const tokenSDK =
-      "BQA4ZTa1JEqr6PvXeJ8UCRxrMyrxhrX01uVZ6vDkYK4B1gTx2j-6lbTkAab1PwVzVzB2cIdcCFP7rsWT7pn794ZUjQgLry28qWByIkaecgDvg1GwjdzwIG5yPTXuL9ueIhEtIcP7tMcV9-s5ubjDTXuV5gohp48B0dU_DlfEOCQmpqNqebEAp3uau0_17gjLhNJxiCu9ePaLHrP4xLThuKkKSVdtozNEHlE2lHnu1D2uipccu1QZQXwHpsyn";
+      "BQDINcQsHbcA9ugO_qiuaaPey0IPYdArST8q3Jb7BJy-T0x9XZlCP2nDOIaxzkMqBrRNbOcTDoAKamb6lkhlGeh7LrRDHjw_6IAVRo5qBtvSY348LOV-8SxlS_A7eKxMWKSKJ9F0AGyA_IJ_E5mKsHi-uFIzH-v3SxsDag8Q4ioak5V3SqbwnsR5iutM5Zy1bRNC3V5qPuGvnGUEOMB-F2Wa0w0ti3QSdAUwj5M8mLnG7DBthF04bBSW78rz";
     let playerCheckInterval;
     function checkForPlayer() {
       if (window.Spotify !== null) clearInterval(playerCheckInterval);
@@ -104,17 +104,34 @@ function App() {
   }, [window.Spotify]);
   console.log(queTrackIndex);
   console.log(playlistQueue);
+
+  function playNextTrack() {
+    playTrack(playlistQueue[queTrackIndex + 1].track.uri);
+    setPlayer({
+      img: playlistQueue[queTrackIndex + 1].track.album.images[2].url,
+      name: playlistQueue[queTrackIndex + 1].track.name,
+      artist: playlistQueue[queTrackIndex + 1].track.artists[0].name,
+      preview_url: playlistQueue[queTrackIndex + 1].track.preview_url,
+      duration: playlistQueue[queTrackIndex + 1].track.duration_ms,
+    });
+    setQueTrackIndex((prev) => (prev += 1));
+  }
+  function playPreviousTrack() {
+    if (player && playlistQueue) {
+      playTrack(playlistQueue[queTrackIndex - 1].track.uri);
+      setPlayer({
+        img: playlistQueue[queTrackIndex - 1].track.album.images[2].url,
+        name: playlistQueue[queTrackIndex - 1].track.name,
+        artist: playlistQueue[queTrackIndex - 1].track.artists[0].name,
+        preview_url: playlistQueue[queTrackIndex - 1].track.preview_url,
+        duration: playlistQueue[queTrackIndex - 1].track.duration_ms,
+      });
+      setQueTrackIndex((prev) => (prev -= 1));
+    }
+  }
   useEffect(() => {
     if (player && playlistQueue && player.duration - playBackTime < 1000) {
-      playTrack(playlistQueue[queTrackIndex + 1].track.uri);
-      setPlayer({
-        img: playlistQueue[queTrackIndex + 1].track.album.images[2].url,
-        name: playlistQueue[queTrackIndex + 1].track.name,
-        artist: playlistQueue[queTrackIndex + 1].track.artists[0].name,
-        preview_url: playlistQueue[queTrackIndex + 1].track.preview_url,
-        duration: playlistQueue[queTrackIndex + 1].track.duration_ms,
-      });
-      setQueTrackIndex((prev) => (prev += 1));
+      playNextTrack();
     }
   }, [playBackTime]);
   console.log(playlistQueue);
@@ -265,7 +282,13 @@ function App() {
                 ]}
               >
                 <playTrackFunctionContext.Provider
-                  value={[playTrack, stopPlaying, resumePlaying]}
+                  value={[
+                    playTrack,
+                    stopPlaying,
+                    resumePlaying,
+                    playNextTrack,
+                    playPreviousTrack,
+                  ]}
                 >
                   <playerContext.Provider
                     value={[

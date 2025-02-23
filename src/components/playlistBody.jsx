@@ -21,9 +21,13 @@ export default function PlaylistBody({
   const [tracksToDisplay, setTracksToDisplay] = useState();
   const [player, setPlayer] = useContext(playerContext);
 
-  const [playTrack, stopPlaying, resumePlaying] = useContext(
-    playTrackFunctionContext
-  );
+  const [
+    playTrack,
+    stopPlaying,
+    resumePlaying,
+    playNextTrack,
+    playPreviousTrack,
+  ] = useContext(playTrackFunctionContext);
 
   const [
     searchedTracks,
@@ -98,6 +102,8 @@ export default function PlaylistBody({
           setIsPlaying={setIsPlaying}
           prevUrl={prevUrl}
           duration={player.duration}
+          playNextTrack={playNextTrack}
+          playPreviousTrack={playPreviousTrack}
         />
       )}
       {tracksToDisplay ? (

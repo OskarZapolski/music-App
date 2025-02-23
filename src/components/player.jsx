@@ -14,6 +14,8 @@ export default function Player({
   artist,
   stopPlaying,
   resumePlaying,
+  playNextTrack,
+  playPreviousTrack,
 
   duration,
 }) {
@@ -63,7 +65,7 @@ export default function Player({
       </div>
       <div>
         <div className="flex justify-around items-center mt-3 w-[45%] mx-auto">
-          <PreviousTrackIcon />
+          <PreviousTrackIcon playPreviousTrack={playPreviousTrack} />
           {!isPlaying ? (
             <StartMusicIcon
               setIsPlaying={setIsPlaying}
@@ -75,7 +77,7 @@ export default function Player({
               stopPlaying={stopPlaying}
             />
           )}
-          <NextTrackIcon />
+          <NextTrackIcon playNextTrack={playNextTrack} />
         </div>
         <ProgerssBar duration={duration} />
       </div>

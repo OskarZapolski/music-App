@@ -25,9 +25,13 @@ export default function MainContent({ playlists, categories }) {
     setSearchedTrackArr,
   ] = useContext(searchContext);
 
-  const [playTrack, stopPlaying, resumePlaying] = useContext(
-    playTrackFunctionContext
-  );
+  const [
+    playTrack,
+    stopPlaying,
+    resumePlaying,
+    playNextTrack,
+    playPreviousTrack,
+  ] = useContext(playTrackFunctionContext);
 
   const arrOfplaylists = playlists.map((playlistsArr) =>
     playlistsArr.map((playlist) => {
@@ -105,6 +109,8 @@ export default function MainContent({ playlists, categories }) {
           isPlaying={isPlaying}
           setIsPlaying={setIsPlaying}
           duration={player.duration}
+          playNextTrack={playNextTrack}
+          playPreviousTrack={playPreviousTrack}
         />
       )}
     </>

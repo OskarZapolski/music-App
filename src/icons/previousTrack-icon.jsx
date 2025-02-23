@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function PreviousTrackIcon() {
+export default function PreviousTrackIcon({ playPreviousTrack }) {
   return (
     <svg
       fill="#000000"
@@ -11,6 +11,10 @@ export default function PreviousTrackIcon() {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 51.532 51.532"
       className="fill-slate-100 hover:scale-110 duration-150"
+      onClick={() => {
+        console.log(1);
+        playPreviousTrack();
+      }}
     >
       <g>
         <path
