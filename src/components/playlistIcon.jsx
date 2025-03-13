@@ -32,7 +32,7 @@ export default function PlaylistIcon({
         });
       }}
     >
-      <img src={images[0]?.url} alt={name} className="min-w-full" />
+      <img src={images[0]?.url} alt={name} className="w-full" />
     </div>
   );
 }

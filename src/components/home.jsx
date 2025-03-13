@@ -41,7 +41,7 @@ export default function Home({ token, clientId, secretId, isPlaying }) {
           const arr = [];
           res.map((res) => {
             if (res != null) {
-              if (arr.length < 5) {
+              if (arr.length < 7) {
                 arr.push(res);
               }
             }

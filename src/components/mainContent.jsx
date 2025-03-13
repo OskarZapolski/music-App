@@ -7,11 +7,18 @@ import SearchedTrack from "./searchedTrack";
 import { playTrackFunctionContext } from "../App";
 import SearchMenu from "./searchMenu";
 import { searchContext } from "../App";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 export const playlistContext = createContext();
 
 export default function MainContent({ playlists, categories }) {
   const token = localStorage.getItem("token");
+
+  const [searchParam] = useSearchParams();
+  const nav = useNavigate();
+  useEffect(() => {
+    nav("/");
+  }, []);
 
   const [playlistsTodisplay, setPlaylistsToDisplay] = useState();
   const [player, setPlayer, isPlaying, setIsPlaying, setPrevUrl, prevUrl] =
@@ -50,7 +57,9 @@ export default function MainContent({ playlists, categories }) {
         );
       } else {
         return (
-          <h2 className="col-span-4 text-3xl uppercase italic">{playlist}</h2>
+          <h2 className="col-span-4 lg:col-span-6 text-3xl uppercase italic">
+            {playlist}
+          </h2>
         );
       }
     })
@@ -87,7 +96,7 @@ export default function MainContent({ playlists, categories }) {
                 if (searchInputValue) setSearchInputValue("");
               }}
             >
-              <div className="w-11/12 mt-16 bg-[#2C2E3A] bg-gradient-to-r from-[rgba(0,0,0,0.7087885154061625)] from-50% to-[rgba(14,2,28,0.9529061624649859)] text-white grid grid-cols-4 gap-10  gap-y-10 rounded-2xl absolute right-0 pb-16 z-40 p-10">
+              <div className="w-11/12 mt-16 bg-[#2C2E3A] bg-gradient-to-r from-[rgba(0,0,0,0.7087885154061625)] from-50% to-[rgba(14,2,28,0.9529061624649859)] text-white grid grid-cols-4 lg:grid-cols-6 gap-10  gap-y-10 rounded-2xl absolute right-0 pb-16 z-40 p-10">
                 {arrOfplaylists}
               </div>
             </div>

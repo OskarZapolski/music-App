@@ -1,7 +1,13 @@
 import { useEffect, useState, createContext } from "react";
 import "./App.css";
 import LogIn from "./components/login";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  useSearchParams,
+} from "react-router-dom";
 import Home from "./components/home";
 import PlaylistBody from "./components/playlistBody";
 import SearchedTrack from "./components/searchedTrack";
@@ -12,6 +18,8 @@ export const searchContext = createContext();
 export const queueContext = createContext();
 
 function App() {
+  const [code, setCode] = useState("");
+
   const [token, setToken] = useState("");
   const [player, setPlayer] = useState();
   const [playerSDK, setPlayerSDK] = useState();
@@ -27,6 +35,98 @@ function App() {
   const [queTrackIndex, setQueTrackIndex] = useState(0);
   const clientId = "aa11595a5869411eacc30f6af0af738d";
   const secretId = "3e867675d0254603a866f88d98ad3820";
+  //zrob styling responsywny, zrob ze jak zmniejszasz to pojawia sie suwak do playlist a nie zeby sie wrapowaly
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const authCode = urlParams.get("code");
+    if (authCode) {
+      setCode(authCode);
+    }
+  }, []);
+
+  async function refreshAccessToken() {
+    console.log("a");
+    const refresh_token = localStorage.getItem("refreshToken");
+    try {
+      const response = await fetch("https://accounts.spotify.com/api/token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          grant_type: "refresh_token",
+          refresh_token: refresh_token,
+          client_id: clientId,
+          client_secret: secretId,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to get refresh token");
+      }
+      const data = await response.json();
+      const newAccessToken = data.access_token;
+      const newRefreshToken = data.refresh_token
+        ? data.refresh_token
+        : refresh_token;
+
+      console.log(data);
+
+      setToken(newAccessToken);
+      localStorage.setItem("token", newAccessToken);
+      localStorage.setItem("refreshToken", newRefreshToken);
+    } catch (err) {
+      console.error("error refresh token ", err);
+    }
+  }
+
+  async function exchangeCodeForToken(authCode) {
+    const redirect_uri = "http://localhost:5173/";
+
+    const body = new URLSearchParams({
+      grant_type: "authorization_code",
+      code: authCode,
+      redirect_uri: redirect_uri,
+      client_id: clientId,
+      client_secret: secretId,
+    });
+
+    try {
+      const response = await fetch("https://accounts.spotify.com/api/token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: body,
+      });
+
+      console.log(response);
+
+      const data = await response.json();
+      console.log("Access Token:", data.access_token);
+      setToken(data.access_token);
+      localStorage.setItem("token", data.access_token);
+      localStorage.setItem("refreshToken", data.refresh_token);
+      console.log("Refresh Token:", data.refresh_token);
+    } catch (error) {
+      console.error("Error getting token:", error);
+    }
+  }
+
+  useEffect(() => {
+    if (!token) return;
+    const refreshInterval = setInterval(() => {
+      refreshAccessToken();
+    }, 3500000);
+
+    return () => clearInterval(refreshInterval);
+  }, [token]);
+
+  useEffect(() => {
+    if (code) {
+      exchangeCodeForToken(code);
+    }
+  }, [code]);
 
   useEffect(() => {
     const token = window.localStorage.getItem("token");
@@ -41,13 +141,12 @@ function App() {
     } else {
       setToken(token);
     }
-    window.location.hash = "";
   }, []);
-  console.log(player);
+
   // playerSDKEventsHandler();
   useEffect(() => {
     const tokenSDK =
-      "BQDINcQsHbcA9ugO_qiuaaPey0IPYdArST8q3Jb7BJy-T0x9XZlCP2nDOIaxzkMqBrRNbOcTDoAKamb6lkhlGeh7LrRDHjw_6IAVRo5qBtvSY348LOV-8SxlS_A7eKxMWKSKJ9F0AGyA_IJ_E5mKsHi-uFIzH-v3SxsDag8Q4ioak5V3SqbwnsR5iutM5Zy1bRNC3V5qPuGvnGUEOMB-F2Wa0w0ti3QSdAUwj5M8mLnG7DBthF04bBSW78rz";
+      "BQBOlhBrfsthbs9xdiq00QjmZIZCmlpHUN3bwutqosnKImDsD2Bmz2yDnkVbBHLMHOmYHMJYulJvfwSEtX8uusx4g6Vg7BFH_fIkL3PwXPiZA1CJ9rf8H8LBxPk-HxmWBev1TZUDaTNn9sYIE5UpWIRKWpyk2PXmmklMJKdJOiS7nTKgmWhF2EtAKVFzqO2gLh040c9pifpRld7-QV1Bgqbi-0ksLekXk4zrrSzaXTCKPl04GaaYLLtE6rXi";
     let playerCheckInterval;
     function checkForPlayer() {
       if (window.Spotify !== null) clearInterval(playerCheckInterval);
@@ -74,6 +173,7 @@ function App() {
       });
       PLAYER.addListener("player_state_changed", (state) => {});
       PLAYER.addListener("ready", ({ device_id }) => {
+        console.log(1);
         setDeviceId(device_id);
         setIsConnected(true);
       });
@@ -89,6 +189,7 @@ function App() {
       //   console.error("Playback error:", message);
       // });
       PLAYER.addListener("authentication_error", ({ message }) => {
+        console.log(2);
         console.error("Authentication error:", message);
       });
 
@@ -102,8 +203,6 @@ function App() {
       }
     }; //153600
   }, [window.Spotify]);
-  console.log(queTrackIndex);
-  console.log(playlistQueue);
 
   function playNextTrack() {
     playTrack(playlistQueue[queTrackIndex + 1].track.uri);
@@ -134,7 +233,7 @@ function App() {
       playNextTrack();
     }
   }, [playBackTime]);
-  console.log(playlistQueue);
+
   async function playTrack(trackUri) {
     console.log(trackUri);
     const apiUrl = `https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`;
@@ -248,7 +347,6 @@ function App() {
   // }, [playerSDK]);
 
   function setQueueFromCurrentPlaylist(id, tracksArr) {
-    console.log(tracksArr);
     if (id < tracksArr.length) {
       const arr = tracksArr.slice(id);
 
@@ -261,7 +359,7 @@ function App() {
   };
 
   return (
-    <div className="font-mono">
+    <div className="font-normal">
       <div
         style={containerStyles}
         className="bg-black bg-gra h-screen w-screen flex overflow-x-hidden relative scrollbar scrollbar-thumb-gray-500 scrollbar-thumb-rounded-full scrollbar-track-transparent"
