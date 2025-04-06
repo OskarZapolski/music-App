@@ -1,13 +1,16 @@
-export default function LoudSpeakerIcon() {
+export default function LoudSpeakerIcon({ soundIconHandler }) {
   return (
     <svg
-      className="text-gray-300 mr-3"
+      className="text-gray-300 mr-3 cursor-pointer"
       fill="currentColor"
       height="20px"
       width="20px"
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 512 512"
+      onClick={() => {
+        soundIconHandler();
+      }}
     >
       <g>
         <g>

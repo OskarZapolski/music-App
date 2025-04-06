@@ -35,7 +35,7 @@ function App() {
   const [queTrackIndex, setQueTrackIndex] = useState(0);
   const clientId = "aa11595a5869411eacc30f6af0af738d";
   const secretId = "3e867675d0254603a866f88d98ad3820";
-  //zrob styling responsywny, zrob ze jak zmniejszasz to pojawia sie suwak do playlist a nie zeby sie wrapowaly
+  //zrob playera dla phone i musisz dla tego zrobic osobna podstrone z przewiajniem piosenek itp tak jak na spotify
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -146,7 +146,7 @@ function App() {
   // playerSDKEventsHandler();
   useEffect(() => {
     const tokenSDK =
-      "BQBOlhBrfsthbs9xdiq00QjmZIZCmlpHUN3bwutqosnKImDsD2Bmz2yDnkVbBHLMHOmYHMJYulJvfwSEtX8uusx4g6Vg7BFH_fIkL3PwXPiZA1CJ9rf8H8LBxPk-HxmWBev1TZUDaTNn9sYIE5UpWIRKWpyk2PXmmklMJKdJOiS7nTKgmWhF2EtAKVFzqO2gLh040c9pifpRld7-QV1Bgqbi-0ksLekXk4zrrSzaXTCKPl04GaaYLLtE6rXi";
+      "BQC2M3TI7GPQwiRME0qLnXibBUVAcHFKe8NOJwS4nJhIFHUXWQAQB1yVJwMU60adp3TBUBQ7WLboeiE4BryKE005nx4p-jkpzWngPqEBNwb41lckfjqTlIrrI1ZzlSdOa2YX_8awxcgSO4IzINZJOb8plhcPoZnWwjGB14BJdU_n4LYTYN6ONBs2ET3pHgIwRM3Mfcf-J-_PAbZiGWFV35kYssaRh9IWFpb1fs380OCCi_NpIzlLThD5Joe_";
     let playerCheckInterval;
     function checkForPlayer() {
       if (window.Spotify !== null) clearInterval(playerCheckInterval);
@@ -362,7 +362,7 @@ function App() {
     <div className="font-normal">
       <div
         style={containerStyles}
-        className="bg-black bg-gra h-screen w-screen flex overflow-x-hidden relative scrollbar scrollbar-thumb-gray-500 scrollbar-thumb-rounded-full scrollbar-track-transparent"
+        className="bg-black bg-gra h-[100vh] w-screen flex overflow-x-hidden relative scrollbar scrollbar-thumb-gray-500 scrollbar-thumb-rounded-full scrollbar-track-transparent"
       >
         {!token ? (
           <LogIn />

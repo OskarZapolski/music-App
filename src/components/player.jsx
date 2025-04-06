@@ -52,8 +52,19 @@ export default function Player({
     width: `${Math.floor(volume * 100)}%`,
   };
 
+  function soundIconHandler() {
+    console.log(volume);
+    if (volume > 0) {
+      setVolume(0);
+      playerSDK.setVolume(0);
+    } else if (volume == 0) {
+      playerSDK.setVolume(0.3);
+      setVolume(0.3);
+    }
+  }
+
   return (
-    <div className="fixed bottom-0  lg:h-[15%] xl:h-[12%] w-full bg-stone-950 right-0 z-10 text-white font-sans grid grid-cols-3">
+    <div className="fixed bottom-[10vh] sm:bottom-0  sm:h-[15%] xl:h-[12%] w-full bg-stone-950 right-0 z-10 text-white font-sans grid grid-cols-3">
       <div className="mx-4 flex items-center h-full">
         <img src={img} alt="" className="w-[11%] rounded-lg mr-5 ml-5" />
         <div>
@@ -82,7 +93,7 @@ export default function Player({
         <ProgerssBar duration={duration} />
       </div>
       <div className="flex  justify-end items-center pr-10">
-        <LoudSpeakerIcon />
+        <LoudSpeakerIcon soundIconHandler={soundIconHandler} />
         <div className=" w-1/4 h-2 relative">
           <hr
             ref={volumeBar}

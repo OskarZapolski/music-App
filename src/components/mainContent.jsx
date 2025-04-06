@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useRef } from "react";
 import PlaylistIcon from "./playlistIcon";
 import PlaylistBody from "./playlistBody";
 import Player from "./player";
@@ -8,6 +8,7 @@ import { playTrackFunctionContext } from "../App";
 import SearchMenu from "./searchMenu";
 import { searchContext } from "../App";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import CategoryPlaylists from "./CategoryPlaylists";
 
 export const playlistContext = createContext();
 
@@ -65,6 +66,10 @@ export default function MainContent({ playlists, categories }) {
     })
   );
 
+  const categoryPlaylists = arrOfplaylists.map((arr, index) => {
+    return <CategoryPlaylists arr={arr} index={index} />;
+  });
+
   const style = {
     height: !player && "100%",
   };
@@ -91,13 +96,13 @@ export default function MainContent({ playlists, categories }) {
 
             <div
               style={style}
-              className="relative h-full  w-full overflow-y-scroll scrollbar scrollbar-thumb-gray-500 scrollbar-thumb-rounded-full scrollbar-track-transparent top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 "
+              className="relative h-full  min-w-full overflow-y-scroll scrollbar scrollbar-thumb-gray-500 scrollbar-thumb-rounded-full scrollbar-track-transparent top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 "
               onClick={() => {
                 if (searchInputValue) setSearchInputValue("");
               }}
             >
-              <div className="w-11/12 mt-16 bg-[#2C2E3A] bg-gradient-to-r from-[rgba(0,0,0,0.7087885154061625)] from-50% to-[rgba(14,2,28,0.9529061624649859)] text-white grid grid-cols-4 lg:grid-cols-6 gap-10  gap-y-10 rounded-2xl absolute right-0 pb-16 z-40 p-10">
-                {arrOfplaylists}
+              <div className=" w-[100vw] sm:w-11/12  bg-[#2C2E3A] bg-gradient-to-r from-[rgba(0,0,0,0.7087885154061625)] from-50% to-[rgba(14,2,28,0.9529061624649859)] text-white  rounded-2xl absolute right-0 pb-16 z-40 p-10 ">
+                {categoryPlaylists}
               </div>
             </div>
           </playlistContext.Provider>

@@ -17,7 +17,7 @@ export default function PlaylistIcon({
 
   return (
     <div
-      className="cursor-pointer"
+      className="cursor-pointer hover:scale-105 duration-150 w-full sm:mx-5 "
       key={id}
       onClick={() => {
         setPrevUrl(location.pathname);
@@ -32,7 +32,7 @@ export default function PlaylistIcon({
         });
       }}
     >
-      <img src={images[0]?.url} alt={name} className="w-full" />
+      <img src={images[0]?.url} alt={name} className="min-w-full" />
     </div>
   );
 }
