@@ -1,4 +1,4 @@
-export default function NextTrackIcon({ playNextTrack }) {
+export default function NextTrackIcon({ playNextTrack, setIsPlaying }) {
   return (
     <svg
       fill="#000000"
@@ -11,6 +11,7 @@ export default function NextTrackIcon({ playNextTrack }) {
       className="fill-slate-100 rotate-180 hover:scale-110 duration-150"
       onClick={() => {
         playNextTrack();
+        setIsPlaying(true);
       }}
     >
       <g>

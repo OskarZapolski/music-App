@@ -33,10 +33,12 @@ function App() {
   const [searchedTracksArr, setSearchedTrackArr] = useState([]);
   const [playlistQueue, setPlaylistQueue] = useState([]);
   const [queTrackIndex, setQueTrackIndex] = useState(0);
+  const [showPhoneTrackSection, setShowPhoneTrackSection] = useState(false);
   const clientId = "aa11595a5869411eacc30f6af0af738d";
   const secretId = "3e867675d0254603a866f88d98ad3820";
   //zrob playera dla phone i musisz dla tego zrobic osobna podstrone z przewiajniem piosenek itp tak jak na spotify
-
+  // zrob aby na telefonie w playlistach nie bylo tej iconki play i aby kolejka dzialala
+  console.log(playlistQueue);
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const authCode = urlParams.get("code");
@@ -146,7 +148,7 @@ function App() {
   // playerSDKEventsHandler();
   useEffect(() => {
     const tokenSDK =
-      "BQC2M3TI7GPQwiRME0qLnXibBUVAcHFKe8NOJwS4nJhIFHUXWQAQB1yVJwMU60adp3TBUBQ7WLboeiE4BryKE005nx4p-jkpzWngPqEBNwb41lckfjqTlIrrI1ZzlSdOa2YX_8awxcgSO4IzINZJOb8plhcPoZnWwjGB14BJdU_n4LYTYN6ONBs2ET3pHgIwRM3Mfcf-J-_PAbZiGWFV35kYssaRh9IWFpb1fs380OCCi_NpIzlLThD5Joe_";
+      "BQATjgaPw6SuHf15B7-CS_yiPF075gBm4dcUF8JjAyXK9h73Rr1HwlQ1yO-8EFOUmY7IkzRpQPWFK5pZvIEglDcp5nnDM20LlLNrrfrogySJSGtOl3j4VMWYxQzneUUJhKlQQ0R2xFqkm3HlWPCOQkkispibE2fmGBhdC8BDVAu_xKhcHQisFeFvgIiN2TBjjy_usrUlNi-rS0S__FmNbgN_cOv4P3IeaH71w8qtAepmS5hQlyzIYmlVYAqTXVKj";
     let playerCheckInterval;
     function checkForPlayer() {
       if (window.Spotify !== null) clearInterval(playerCheckInterval);
@@ -203,11 +205,13 @@ function App() {
       }
     }; //153600
   }, [window.Spotify]);
-
+  console.log(isPlaying);
   function playNextTrack() {
     playTrack(playlistQueue[queTrackIndex + 1].track.uri);
+
     setPlayer({
       img: playlistQueue[queTrackIndex + 1].track.album.images[2].url,
+      img2: playlistQueue[queTrackIndex + 1].track.album.images[1].url,
       name: playlistQueue[queTrackIndex + 1].track.name,
       artist: playlistQueue[queTrackIndex + 1].track.artists[0].name,
       preview_url: playlistQueue[queTrackIndex + 1].track.preview_url,
@@ -220,6 +224,7 @@ function App() {
       playTrack(playlistQueue[queTrackIndex - 1].track.uri);
       setPlayer({
         img: playlistQueue[queTrackIndex - 1].track.album.images[2].url,
+        img2: playlistQueue[queTrackIndex - 1].track.album.images[1].url,
         name: playlistQueue[queTrackIndex - 1].track.name,
         artist: playlistQueue[queTrackIndex - 1].track.artists[0].name,
         preview_url: playlistQueue[queTrackIndex - 1].track.preview_url,
@@ -327,6 +332,7 @@ function App() {
             track={track}
             playTrack={playTrack}
             setPrevUrl={setPrevUrl}
+            setSearchInputValue={setSearchInputValue}
           />
         );
       });
@@ -355,7 +361,7 @@ function App() {
   }
 
   const containerStyles = {
-    height: player ? "88vh" : "full",
+    height: player ? (showPhoneTrackSection ? "100vh" : "88vh") : "full",
   };
 
   return (
@@ -368,7 +374,13 @@ function App() {
           <LogIn />
         ) : (
           <BrowserRouter>
-            <queueContext.Provider value={{ setQueueFromCurrentPlaylist }}>
+            <queueContext.Provider
+              value={{
+                setQueueFromCurrentPlaylist,
+                showPhoneTrackSection,
+                setShowPhoneTrackSection,
+              }}
+            >
               <searchContext.Provider
                 value={[
                   searchedTracks,

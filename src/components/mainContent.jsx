@@ -9,6 +9,8 @@ import SearchMenu from "./searchMenu";
 import { searchContext } from "../App";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import CategoryPlaylists from "./CategoryPlaylists";
+import { queueContext } from "../App";
+import PhoneTrackSection from "./phoneTrackSection";
 
 export const playlistContext = createContext();
 
@@ -32,7 +34,8 @@ export default function MainContent({ playlists, categories }) {
     searchedTracksArr,
     setSearchedTrackArr,
   ] = useContext(searchContext);
-
+  const { showPhoneTrackSection, setShowPhoneTrackSection } =
+    useContext(queueContext);
   const [
     playTrack,
     stopPlaying,
@@ -83,7 +86,22 @@ export default function MainContent({ playlists, categories }) {
 
   return (
     <>
-      {!playlistsTodisplay ? (
+      {showPhoneTrackSection ? (
+        <PhoneTrackSection
+          img={player.img2}
+          name={player.name}
+          artist={player.artist}
+          preview_url={player.preview_url}
+          stopPlaying={stopPlaying}
+          resumePlaying={resumePlaying}
+          isPlaying={isPlaying}
+          setIsPlaying={setIsPlaying}
+          prevUrl={prevUrl}
+          duration={player.duration}
+          playNextTrack={playNextTrack}
+          playPreviousTrack={playPreviousTrack}
+        />
+      ) : !playlistsTodisplay ? (
         <div className="w-full">
           <playlistContext.Provider value={{ setPlaylistsToDisplay }}>
             <SearchMenu
@@ -101,7 +119,7 @@ export default function MainContent({ playlists, categories }) {
                 if (searchInputValue) setSearchInputValue("");
               }}
             >
-              <div className=" w-[100vw] sm:w-11/12  bg-[#2C2E3A] bg-gradient-to-r from-[rgba(0,0,0,0.7087885154061625)] from-50% to-[rgba(14,2,28,0.9529061624649859)] text-white  rounded-2xl absolute right-0 pb-16 z-40 p-10 ">
+              <div className=" w-[100vw] sm:w-11/12  bg-[#2C2E3A] bg-gradient-to-r from-[rgba(0,0,0,0.7087885154061625)] from-50% to-[rgba(14,2,28,0.9529061624649859)] text-white  rounded-2xl absolute right-0 pb-16 z-40 p-10 h-full">
                 {categoryPlaylists}
               </div>
             </div>

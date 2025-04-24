@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function PreviousTrackIcon({ playPreviousTrack }) {
+export default function PreviousTrackIcon({ playPreviousTrack, setIsPlaying }) {
   return (
     <svg
       fill="#000000"
@@ -14,6 +14,7 @@ export default function PreviousTrackIcon({ playPreviousTrack }) {
       onClick={() => {
         console.log(1);
         playPreviousTrack();
+        setIsPlaying(true);
       }}
     >
       <g>

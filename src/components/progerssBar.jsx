@@ -59,22 +59,22 @@ export default function ProgerssBar({ duration }) {
 
   return (
     <div className="flex justify-center items-center">
-      <span>
+      <span className="text-white">
         {currentMinutes}:{currentSeconds}
       </span>
       <div className="w-3/4 mx-3 relative">
         <hr
           ref={seekBar}
-          className="w-full h-1 bg-zinc-600 rounded-3xl border-zinc-600 cursor-pointer"
+          className="w-full h-1.5 bg-zinc-600 rounded-3xl border-zinc-600 cursor-pointer"
           onClick={(e) => seekBarClicked(e)}
         />
         <hr
           style={styleHr}
-          className=" bg-white h-1 z-10 absolute top-0 bg-white rounded-3xl cursor-pointer"
+          className=" bg-white h-1.5 z-10 absolute top-0 bg-white rounded-3xl cursor-pointer"
           onClick={(e) => seekBarClicked(e)}
         />
       </div>
-      <span>
+      <span className="text-white">
         -{durationMinute}:{durationSecond}
       </span>
     </div>

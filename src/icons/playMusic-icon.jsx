@@ -15,12 +15,12 @@ export default function PlayMusicIcon({
   const { setQueueFromCurrentPlaylist } = useContext(queueContext);
   return (
     <svg
-      className="hidden group-hover:block fill-white absolute group-hover:bg-[#000000b8] p-[6px]"
+      className="w-[13%] xl:w-[57px] 2xl:w-[65px] hidden lg:group-hover:block fill-white absolute group-hover:bg-[#000000b8] p-[6px]"
       style={style}
       fill="#000000"
       height="60px"
-      width="12%"
       version="1.1"
+      width="100px"
       id="Capa_1"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 60 60"
@@ -34,10 +34,12 @@ export default function PlayMusicIcon({
           duration: track.duration_ms,
         });
         playTrack(track.uri);
-        if (id >= 0) {
+        console.log(track);
+        if (id && id >= 0) {
           console.log(id);
           setQueueFromCurrentPlaylist(id, tracksArr);
         }
+        console.log(2);
       }}
     >
       <g>
