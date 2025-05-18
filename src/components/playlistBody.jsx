@@ -88,12 +88,16 @@ export default function PlaylistBody({
     borderBottomRightRadius: searchInputValue ? "0" : "1.5rem",
   };
   const stylePostion = {
-    position: "static",
+    position: "fixed",
   };
   return (
     <>
       <Navbar isPlaying={isPlaying} setPrevUrl={setPrevUrl} prevUrl={prevUrl} />
-      {showPhoneTrackSection ? (
+      <div
+        className={`fixed bottom-0 left-0 w-full h-[100vh] bg-[#2C2E3A] z-50 rounded-t-2xl transition-transform duration-500 ease-in-out ${
+          showPhoneTrackSection ? "translate-y-0" : "translate-y-full"
+        }`}
+      >
         <PhoneTrackSection
           img={player.img2}
           name={player.name}
@@ -108,24 +112,23 @@ export default function PlaylistBody({
           playNextTrack={playNextTrack}
           playPreviousTrack={playPreviousTrack}
         />
-      ) : (
-        player && (
-          <Player
-            img={player.img}
-            name={player.name}
-            artist={player.artist}
-            preview_url={player.preview_url}
-            stopPlaying={stopPlaying}
-            resumePlaying={resumePlaying}
-            isPlaying={isPlaying}
-            setIsPlaying={setIsPlaying}
-            prevUrl={prevUrl}
-            duration={player.duration}
-            playNextTrack={playNextTrack}
-            playPreviousTrack={playPreviousTrack}
-          />
-        )
-      )}
+      </div>
+      {player && !showPhoneTrackSection} && (
+      <Player
+        img={player.img}
+        name={player.name}
+        artist={player.artist}
+        preview_url={player.preview_url}
+        stopPlaying={stopPlaying}
+        resumePlaying={resumePlaying}
+        isPlaying={isPlaying}
+        setIsPlaying={setIsPlaying}
+        prevUrl={prevUrl}
+        duration={player.duration}
+        playNextTrack={playNextTrack}
+        playPreviousTrack={playPreviousTrack}
+      />
+      )
       {tracksToDisplay && !showPhoneTrackSection ? (
         <>
           <SearchMenu

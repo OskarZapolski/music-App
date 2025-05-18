@@ -16,6 +16,7 @@ export const playerContext = createContext();
 export const playTrackFunctionContext = createContext();
 export const searchContext = createContext();
 export const queueContext = createContext();
+export const favoriteContext = createContext();
 
 function App() {
   const [code, setCode] = useState("");
@@ -34,10 +35,12 @@ function App() {
   const [playlistQueue, setPlaylistQueue] = useState([]);
   const [queTrackIndex, setQueTrackIndex] = useState(0);
   const [showPhoneTrackSection, setShowPhoneTrackSection] = useState(false);
+  const [favoriteTracks, setFavoriteTracks] = useState([]);
   const clientId = "aa11595a5869411eacc30f6af0af738d";
   const secretId = "3e867675d0254603a866f88d98ad3820";
-  //zrob playera dla phone i musisz dla tego zrobic osobna podstrone z przewiajniem piosenek itp tak jak na spotify
+  //glosnosc phone i slide jak klikasz na iconke piosenki
   // zrob aby na telefonie w playlistach nie bylo tej iconki play i aby kolejka dzialala
+
   console.log(playlistQueue);
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -114,7 +117,7 @@ function App() {
       console.error("Error getting token:", error);
     }
   }
-
+  console.log(favoriteTracks);
   useEffect(() => {
     if (!token) return;
     const refreshInterval = setInterval(() => {
@@ -129,6 +132,17 @@ function App() {
       exchangeCodeForToken(code);
     }
   }, [code]);
+
+  useEffect(() => {
+    fetch("https://api.spotify.com/v1/me/tracks?limit=50", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((resp) => resp.json())
+      .then((data) => setFavoriteTracks(data.items))
+      .catch((err) => console.error(err));
+  }, [token]);
 
   useEffect(() => {
     const token = window.localStorage.getItem("token");
@@ -148,7 +162,7 @@ function App() {
   // playerSDKEventsHandler();
   useEffect(() => {
     const tokenSDK =
-      "BQATjgaPw6SuHf15B7-CS_yiPF075gBm4dcUF8JjAyXK9h73Rr1HwlQ1yO-8EFOUmY7IkzRpQPWFK5pZvIEglDcp5nnDM20LlLNrrfrogySJSGtOl3j4VMWYxQzneUUJhKlQQ0R2xFqkm3HlWPCOQkkispibE2fmGBhdC8BDVAu_xKhcHQisFeFvgIiN2TBjjy_usrUlNi-rS0S__FmNbgN_cOv4P3IeaH71w8qtAepmS5hQlyzIYmlVYAqTXVKj";
+      "BQBQD94CgKMyoGYG_tHmTaFMM9lWbhrf7mCGIZ6lNLXytgBcc7UPX92zJGlG19tMuS8Bn-72tjnSd4uRLDEtOBbk_3hhQAkMqaHSMa_Sv04ojb4F9ltlOXfxA9wmQrbgXcoUDvrF2_aW0PXKugEaVJI0Db_TRIND2CqwKUpRK1u1mR6y8bHOmAvDW2I3ZHA_VAwdZ833ZzXj7SykYW3GadMtL8aS4rZRYh6MvlYVXa-lXxFKIYui9vEwe6wKpYB0HaSi";
     let playerCheckInterval;
     function checkForPlayer() {
       if (window.Spotify !== null) clearInterval(playerCheckInterval);
@@ -413,31 +427,35 @@ function App() {
                       playerSDK,
                     ]}
                   >
-                    <Routes>
-                      <Route
-                        path="/"
-                        element={
-                          <Home
-                            token={token}
-                            clientId={clientId}
-                            secretId={secretId}
-                            isPlaying={isPlaying}
-                          />
-                        }
-                      />
+                    <favoriteContext.Provider
+                      value={{ setFavoriteTracks, favoriteTracks }}
+                    >
+                      <Routes>
+                        <Route
+                          path="/"
+                          element={
+                            <Home
+                              token={token}
+                              clientId={clientId}
+                              secretId={secretId}
+                              isPlaying={isPlaying}
+                            />
+                          }
+                        />
 
-                      <Route
-                        path="/playlist"
-                        element={
-                          <PlaylistBody
-                            setIsPlaying={setIsPlaying}
-                            isPlaying={isPlaying}
-                            prevUrl={prevUrl}
-                            setPrevUrl={setPrevUrl}
-                          />
-                        }
-                      />
-                    </Routes>
+                        <Route
+                          path="/playlist"
+                          element={
+                            <PlaylistBody
+                              setIsPlaying={setIsPlaying}
+                              isPlaying={isPlaying}
+                              prevUrl={prevUrl}
+                              setPrevUrl={setPrevUrl}
+                            />
+                          }
+                        />
+                      </Routes>
+                    </favoriteContext.Provider>
                   </playerContext.Provider>
                 </playTrackFunctionContext.Provider>
               </searchContext.Provider>

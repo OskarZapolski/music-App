@@ -32,7 +32,7 @@ export default function Home({ token, clientId, secretId, isPlaying }) {
     //       localStorage.setItem("refresh_token", data.refreshToken);
     //     }
     //   });
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     async function setPlaylist() {
@@ -52,7 +52,7 @@ export default function Home({ token, clientId, secretId, isPlaying }) {
       );
     }
     return setPlaylist;
-  }, []);
+  }, [token]);
   // rgba(22,3,45,0.7344187675070029)
 
   return (

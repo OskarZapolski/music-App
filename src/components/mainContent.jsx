@@ -114,7 +114,7 @@ export default function MainContent({ playlists, categories }) {
 
             <div
               style={style}
-              className="relative h-full  min-w-full overflow-y-scroll scrollbar scrollbar-thumb-gray-500 scrollbar-thumb-rounded-full scrollbar-track-transparent top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 "
+              className="relative h-full  min-w-full overflow-y-scroll scrollbar scrollbar-thumb-gray-500 scrollbar-thumb-rounded-full scrollbar-track-transparent top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pt-5"
               onClick={() => {
                 if (searchInputValue) setSearchInputValue("");
               }}

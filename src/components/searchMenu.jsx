@@ -6,7 +6,7 @@ export default function SearchMenu({
   stylePos,
 }) {
   return (
-    <div style={stylePos} className="w-full h-[10%] z-10 right-0">
+    <div style={stylePos} className="w-full h-[10%] z-10 right-0  fixed">
       <div className=" bg-[#000000] h-full flex items-center justify-center flex-col relative">
         <input
           style={inputStyle}

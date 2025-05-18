@@ -1,6 +1,8 @@
 import PlayMusicIcon from "../icons/playMusic-icon";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { queueContext } from "../App";
+import FavoriteIcon from "../icons/favorite-icon";
+import { favoriteContext } from "../App";
 export default function Track({
   track,
   setPlayer,
@@ -9,15 +11,70 @@ export default function Track({
   id,
   tracksArr,
 }) {
+  const [heartColor, setHeartColor] = useState(false);
   const mins = Math.floor(Math.floor(track.track.duration_ms / 1000) / 60);
   let secs = Math.floor((track.track.duration_ms / 1000) % 60);
   if (secs < 10) {
     secs = "0" + secs;
   }
   const { setQueueFromCurrentPlaylist } = useContext(queueContext);
+  const { setFavoriteTracks, favoriteTracks } = useContext(favoriteContext);
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    if (favoriteTracks) {
+      const isThereTrack = favoriteTracks.some(
+        (ftrack) => ftrack.track.id == track.track.id
+      );
+      setHeartColor(isThereTrack);
+    }
+  }, [favoriteTracks]);
+
+  function addToFavorite() {
+    const trackIds = track.track.id;
+    fetch(`https://api.spotify.com/v1/me/tracks/contains?ids=${trackIds}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        if (data[0] == false) {
+          fetch("https://api.spotify.com/v1/me/tracks", {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              ids: [trackIds],
+            }),
+          }).then((res) => console.log(res));
+        } else {
+          fetch(`https://api.spotify.com/v1/me/tracks?ids=${trackIds}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }).then((resp) => {
+            setFavoriteTracks((prev) =>
+              prev.filter((track) => track.track.id != trackIds)
+            );
+          });
+        }
+      })
+      .catch((err) => console.error(err));
+    if (heartColor == false) {
+      setFavoriteTracks((prev) => [...prev, track]);
+    }
+    setHeartColor((prev) => !prev);
+  }
+
   return (
-    <div className="group grid grid-cols-8 py-3 px-3 hover:bg-[#51515169] items-center duration-200 rounded-lg">
-      <div className=" flex items-center text-base  w-full max-w-md text-ellipsis truncate col-span-8 sm:col-span-3 relative">
+    <div className="group sm:grid grid-cols-8 py-3 px-3 hover:bg-[#51515169] items-center duration-200 rounded-lg flex">
+      <div className=" flex items-center text-base  w-full max-w-md text-ellipsis truncate col-span-6 sm:col-span-3 relative ">
         <img
           src={track.track.album.images[2].url}
           alt=""
@@ -48,7 +105,7 @@ export default function Track({
           id={id}
           tracksArr={tracksArr}
         />
-        <p className="text-base   max-w-md text-ellipsis truncate">
+        <p className="text-base   max-w-md text-ellipsis truncate w-3/4">
           <p>{track.track.name}</p>
           <p className="text-[12px] text-gray-400">
             {track.track.artists[0].name}
@@ -61,10 +118,16 @@ export default function Track({
       <div className="sm:col-span-2 text-ellipsis truncate hidden sm:block">
         <p className="text-base ">{track.added_at.substr(0, 10)}</p>
       </div>
-      <div>
-        <p className="text-base  text-start hidden sm:block">
+      <div className="flex justify-around">
+        <p className="text-base  text-start hidden sm:block ">
           {mins}:{secs}
         </p>
+        <FavoriteIcon
+          styles={`w-[25px] h-[25px] ${
+            heartColor ? "text-white" : "text-gray-700"
+          } hover:scale-110 cursor-pointer duration-100`}
+          addToFavorite={addToFavorite}
+        />
       </div>
     </div>
   );

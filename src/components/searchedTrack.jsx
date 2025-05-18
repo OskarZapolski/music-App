@@ -20,7 +20,7 @@ export default function SearchedTrack({
           <img
             src={image}
             alt=""
-            className=" w-[90%] xl:w-[57px]  2xl:w-[65px] xl:mr-2 group-hover:-z-2 relative rounded-md"
+            className=" w-[90%] xl:w-[57px]  2xl:w-[60px] xl:mr-2 group-hover:-z-2 relative rounded-md"
             onClick={() => {
               setPrevUrl(location.pathname);
               setPlayer({

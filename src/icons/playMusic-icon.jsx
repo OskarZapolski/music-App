@@ -15,7 +15,7 @@ export default function PlayMusicIcon({
   const { setQueueFromCurrentPlaylist } = useContext(queueContext);
   return (
     <svg
-      className="w-[13%] xl:w-[57px] 2xl:w-[65px] hidden lg:group-hover:block fill-white absolute group-hover:bg-[#000000b8] p-[6px]"
+      className="w-[13%] xl:w-[57px] 2xl:w-[60px] hidden lg:group-hover:block fill-white absolute group-hover:bg-[#000000b8] p-[6px]"
       style={style}
       fill="#000000"
       height="60px"
