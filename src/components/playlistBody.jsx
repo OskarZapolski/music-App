@@ -90,16 +90,35 @@ export default function PlaylistBody({
   const stylePostion = {
     position: "fixed",
   };
+
   return (
     <>
       <Navbar isPlaying={isPlaying} setPrevUrl={setPrevUrl} prevUrl={prevUrl} />
       <div
-        className={`fixed bottom-0 left-0 w-full h-[100vh] bg-[#2C2E3A] z-50 rounded-t-2xl transition-transform duration-500 ease-in-out ${
+        className={`fixed bottom-0 left-0 w-full h-[100vh] bg-[#2C2E3A] z-50  transition-transform duration-500 ease-in-out ${
           showPhoneTrackSection ? "translate-y-0" : "translate-y-full"
         }`}
       >
-        <PhoneTrackSection
-          img={player.img2}
+        {player && (
+          <PhoneTrackSection
+            img={player.img2}
+            name={player.name}
+            artist={player.artist}
+            preview_url={player.preview_url}
+            stopPlaying={stopPlaying}
+            resumePlaying={resumePlaying}
+            isPlaying={isPlaying}
+            setIsPlaying={setIsPlaying}
+            prevUrl={prevUrl}
+            duration={player.duration}
+            playNextTrack={playNextTrack}
+            playPreviousTrack={playPreviousTrack}
+          />
+        )}
+      </div>
+      {player && !showPhoneTrackSection && (
+        <Player
+          img={player.img}
           name={player.name}
           artist={player.artist}
           preview_url={player.preview_url}
@@ -112,23 +131,7 @@ export default function PlaylistBody({
           playNextTrack={playNextTrack}
           playPreviousTrack={playPreviousTrack}
         />
-      </div>
-      {player && !showPhoneTrackSection} && (
-      <Player
-        img={player.img}
-        name={player.name}
-        artist={player.artist}
-        preview_url={player.preview_url}
-        stopPlaying={stopPlaying}
-        resumePlaying={resumePlaying}
-        isPlaying={isPlaying}
-        setIsPlaying={setIsPlaying}
-        prevUrl={prevUrl}
-        duration={player.duration}
-        playNextTrack={playNextTrack}
-        playPreviousTrack={playPreviousTrack}
-      />
-      )
+      )}
       {tracksToDisplay && !showPhoneTrackSection ? (
         <>
           <SearchMenu

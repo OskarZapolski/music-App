@@ -18,7 +18,8 @@ export default function Track({
     secs = "0" + secs;
   }
   const { setQueueFromCurrentPlaylist } = useContext(queueContext);
-  const { setFavoriteTracks, favoriteTracks } = useContext(favoriteContext);
+  const { setFavoriteTracks, favoriteTracks, addToFavorite } =
+    useContext(favoriteContext);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -29,48 +30,6 @@ export default function Track({
       setHeartColor(isThereTrack);
     }
   }, [favoriteTracks]);
-
-  function addToFavorite() {
-    const trackIds = track.track.id;
-    fetch(`https://api.spotify.com/v1/me/tracks/contains?ids=${trackIds}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((resp) => resp.json())
-      .then((data) => {
-        if (data[0] == false) {
-          fetch("https://api.spotify.com/v1/me/tracks", {
-            method: "PUT",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              ids: [trackIds],
-            }),
-          }).then((res) => console.log(res));
-        } else {
-          fetch(`https://api.spotify.com/v1/me/tracks?ids=${trackIds}`, {
-            method: "DELETE",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }).then((resp) => {
-            setFavoriteTracks((prev) =>
-              prev.filter((track) => track.track.id != trackIds)
-            );
-          });
-        }
-      })
-      .catch((err) => console.error(err));
-    if (heartColor == false) {
-      setFavoriteTracks((prev) => [...prev, track]);
-    }
-    setHeartColor((prev) => !prev);
-  }
 
   return (
     <div className="group sm:grid grid-cols-8 py-3 px-3 hover:bg-[#51515169] items-center duration-200 rounded-lg flex">
@@ -124,9 +83,12 @@ export default function Track({
         </p>
         <FavoriteIcon
           styles={`w-[25px] h-[25px] ${
-            heartColor ? "text-white" : "text-gray-700"
+            heartColor ? "text-white" : "text-gray-600"
           } hover:scale-110 cursor-pointer duration-100`}
           addToFavorite={addToFavorite}
+          track={track}
+          heartColor={heartColor}
+          setHeartColor={setHeartColor}
         />
       </div>
     </div>

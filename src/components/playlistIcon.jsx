@@ -17,7 +17,7 @@ export default function PlaylistIcon({
 
   return (
     <div
-      className="cursor-pointer hover:scale-105 duration-150 w-full sm:mx-5 "
+      className="cursor-pointer hover:scale-105 duration-150 w-full sm:mx-5 flex items-center"
       key={id}
       onClick={() => {
         setPrevUrl(location.pathname);

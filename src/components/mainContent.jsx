@@ -76,13 +76,6 @@ export default function MainContent({ playlists, categories }) {
   const style = {
     height: !player && "100%",
   };
-  const inputStyle = {
-    borderBottomLeftRadius: searchInputValue ? "0" : "1.5rem",
-    borderBottomRightRadius: searchInputValue ? "0" : "1.5rem",
-  };
-  const stylePostion = {
-    position: "fixed",
-  };
 
   return (
     <>
@@ -105,11 +98,9 @@ export default function MainContent({ playlists, categories }) {
         <div className="w-full">
           <playlistContext.Provider value={{ setPlaylistsToDisplay }}>
             <SearchMenu
-              inputStyle={inputStyle}
               searchInputValue={searchInputValue}
               setSearchInputValue={setSearchInputValue}
               searchedTracksArr={searchedTracksArr}
-              stylePos={stylePostion}
             />
 
             <div
@@ -119,7 +110,7 @@ export default function MainContent({ playlists, categories }) {
                 if (searchInputValue) setSearchInputValue("");
               }}
             >
-              <div className=" w-[100vw] sm:w-11/12  bg-[#2C2E3A] bg-gradient-to-r from-[rgba(0,0,0,0.7087885154061625)] from-50% to-[rgba(14,2,28,0.9529061624649859)] text-white  rounded-2xl absolute right-0 pb-16 z-40 p-10 h-full">
+              <div className=" w-[100vw] sm:w-11/12  bg-[#2C2E3A] bg-gradient-to-r from-[rgba(0,0,0,0.7087885154061625)] from-50% to-[rgba(14,2,28,0.9529061624649859)] text-white  rounded-2xl absolute right-0 pb-24 z-40 p-10 h-100vh">
                 {categoryPlaylists}
               </div>
             </div>

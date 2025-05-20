@@ -11,6 +11,7 @@ import {
 import Home from "./components/home";
 import PlaylistBody from "./components/playlistBody";
 import SearchedTrack from "./components/searchedTrack";
+import Favorites from "./components/favorites";
 
 export const playerContext = createContext();
 export const playTrackFunctionContext = createContext();
@@ -144,6 +145,53 @@ function App() {
       .catch((err) => console.error(err));
   }, [token]);
 
+  function addToFavorite(track, heartColor, setHeartColor) {
+    const trackIds = track.track.id;
+    fetch(`https://api.spotify.com/v1/me/tracks/contains?ids=${trackIds}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((resp) => resp.json())
+      .then((data) => {
+        if (data[0] == false) {
+          fetch("https://api.spotify.com/v1/me/tracks", {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              ids: [trackIds],
+            }),
+          }).then((res) => {
+            setHeartColor(true);
+            setFavoriteTracks((prev) => [...prev, track]);
+          });
+        } else {
+          fetch(`https://api.spotify.com/v1/me/tracks?ids=${trackIds}`, {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }).then((resp) => {
+            setFavoriteTracks((prev) =>
+              prev.filter((track) => track.track.id != trackIds)
+            );
+            setHeartColor(false);
+          });
+        }
+      })
+      .catch((err) => console.error(err));
+    //   if (heartColor == false) {
+    //     setFavoriteTracks((prev) => [...prev, track]);
+    //   }
+    //   setHeartColor((prev) => !prev);
+    //   console.log(heartColor);
+  }
+
   useEffect(() => {
     const token = window.localStorage.getItem("token");
     const hash = window.location.hash;
@@ -162,7 +210,7 @@ function App() {
   // playerSDKEventsHandler();
   useEffect(() => {
     const tokenSDK =
-      "BQBQD94CgKMyoGYG_tHmTaFMM9lWbhrf7mCGIZ6lNLXytgBcc7UPX92zJGlG19tMuS8Bn-72tjnSd4uRLDEtOBbk_3hhQAkMqaHSMa_Sv04ojb4F9ltlOXfxA9wmQrbgXcoUDvrF2_aW0PXKugEaVJI0Db_TRIND2CqwKUpRK1u1mR6y8bHOmAvDW2I3ZHA_VAwdZ833ZzXj7SykYW3GadMtL8aS4rZRYh6MvlYVXa-lXxFKIYui9vEwe6wKpYB0HaSi";
+      "BQAGZ3HHY4Wo5j3doapUUEGu2AlIkg-5ewkeLpVasCTt1UHxQhcuCDdkIMONvZzZ0ydAn9jBGht_En3gmVzKwmmAa6dHKM8uFitlTV3Dngj3apZQTDJG5EyFgtpBtXRMOdC1f-nSr_3ZbICelnR1-XMGoQTofKBQO6UWbFqKFac8fYMotZlSELR8u6G35aOMwdyXw2gVpKN-rF-PWZaDHVabSACw3cGrNYmosj1G9PtnwQH684464H-5C3G4TGjq9b8c";
     let playerCheckInterval;
     function checkForPlayer() {
       if (window.Spotify !== null) clearInterval(playerCheckInterval);
@@ -221,6 +269,7 @@ function App() {
   }, [window.Spotify]);
   console.log(isPlaying);
   function playNextTrack() {
+    console.log(playlistQueue);
     playTrack(playlistQueue[queTrackIndex + 1].track.uri);
 
     setPlayer({
@@ -326,6 +375,7 @@ function App() {
       });
       if (response.ok) {
         const data = await response.json();
+        console.log(data);
         setSearchedTracks(data.tracks.items.map((track) => ({ ...track })));
       }
     }
@@ -428,7 +478,11 @@ function App() {
                     ]}
                   >
                     <favoriteContext.Provider
-                      value={{ setFavoriteTracks, favoriteTracks }}
+                      value={{
+                        setFavoriteTracks,
+                        favoriteTracks,
+                        addToFavorite,
+                      }}
                     >
                       <Routes>
                         <Route
@@ -453,6 +507,10 @@ function App() {
                               setPrevUrl={setPrevUrl}
                             />
                           }
+                        />
+                        <Route
+                          path="/favorites"
+                          element={<Favorites token={token} />}
                         />
                       </Routes>
                     </favoriteContext.Provider>

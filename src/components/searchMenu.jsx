@@ -1,10 +1,15 @@
 export default function SearchMenu({
-  inputStyle,
   searchInputValue,
   setSearchInputValue,
   searchedTracksArr,
-  stylePos,
 }) {
+  const inputStyle = {
+    borderBottomLeftRadius: searchInputValue ? "0" : "1.5rem",
+    borderBottomRightRadius: searchInputValue ? "0" : "1.5rem",
+  };
+  const stylePos = {
+    position: "fixed",
+  };
   return (
     <div style={stylePos} className="w-full h-[10%] z-10 right-0  fixed">
       <div className=" bg-[#000000] h-full flex items-center justify-center flex-col relative">

@@ -3,8 +3,10 @@ import HomeIcon from "../icons/home-icon";
 import LibraryIcon from "../icons/library-icon";
 import { useContext } from "react";
 import { queueContext } from "../App";
+import { useNavigate } from "react-router-dom";
 export default function Navbar({ isPlaying, setPrevUrl, prevUrl }) {
   const { showPhoneTrackSection } = useContext(queueContext);
+  const nav = useNavigate();
   return (
     <>
       {!showPhoneTrackSection && (
@@ -21,6 +23,8 @@ export default function Navbar({ isPlaying, setPrevUrl, prevUrl }) {
             styles={
               "text-gray-100 row-start-5 hover:text-slate-300 duration-300 xl:w-[60px] w-[50px] cursor-pointer"
             }
+            nav={nav}
+            setPrevUrl={setPrevUrl}
           />
 
           <LibraryIcon
