@@ -75,7 +75,9 @@ export default function Track({
         {track.track.album.name}
       </div>
       <div className="sm:col-span-2 text-ellipsis truncate hidden sm:block">
-        <p className="text-base ">{track.added_at.substr(0, 10)}</p>
+        <p className="text-base ">
+          {track.added_at && track.added_at.substr(0, 10)}
+        </p>
       </div>
       <div className="flex justify-around">
         <p className="text-base  text-start hidden sm:block ">

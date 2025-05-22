@@ -9,7 +9,7 @@ export default function getPlaylist(token, category) {
   };
   const ps = category.map((category) => {
     return fetch(
-      `https://api.spotify.com/v1/search?q=${category}&type=playlist`,
+      `https://api.spotify.com/v1/search?q=${category}&type=playlist&market=US`,
       fetchOptions
     )
       .then((res) => {
@@ -19,7 +19,10 @@ export default function getPlaylist(token, category) {
           console.error(res.status);
         }
       })
-      .then((data) => [category, ...data.playlists.items]);
+      .then((data) => {
+        console.log(data);
+        return [category, ...data.playlists.items];
+      });
   });
 
   return ps;

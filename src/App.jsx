@@ -118,7 +118,7 @@ function App() {
       console.error("Error getting token:", error);
     }
   }
-  console.log(favoriteTracks);
+
   useEffect(() => {
     if (!token) return;
     const refreshInterval = setInterval(() => {
@@ -167,7 +167,7 @@ function App() {
             }),
           }).then((res) => {
             setHeartColor(true);
-            setFavoriteTracks((prev) => [...prev, track]);
+            setFavoriteTracks((prev) => [track, ...prev]);
           });
         } else {
           fetch(`https://api.spotify.com/v1/me/tracks?ids=${trackIds}`, {
@@ -209,8 +209,8 @@ function App() {
 
   // playerSDKEventsHandler();
   useEffect(() => {
-    const tokenSDK =
-      "BQAGZ3HHY4Wo5j3doapUUEGu2AlIkg-5ewkeLpVasCTt1UHxQhcuCDdkIMONvZzZ0ydAn9jBGht_En3gmVzKwmmAa6dHKM8uFitlTV3Dngj3apZQTDJG5EyFgtpBtXRMOdC1f-nSr_3ZbICelnR1-XMGoQTofKBQO6UWbFqKFac8fYMotZlSELR8u6G35aOMwdyXw2gVpKN-rF-PWZaDHVabSACw3cGrNYmosj1G9PtnwQH684464H-5C3G4TGjq9b8c";
+    const tokenSDK = token;
+
     let playerCheckInterval;
     function checkForPlayer() {
       if (window.Spotify !== null) clearInterval(playerCheckInterval);
@@ -223,7 +223,7 @@ function App() {
     handleLogin();
 
     window.onSpotifyWebPlaybackSDKReady = () => {
-      const PLAYER = new window.Spotify.Player({
+      const PLAYER = new Spotify.Player({
         name: "Web Playback SDK Quick Start Player",
         getOAuthToken: (cb) => {
           cb(tokenSDK);
@@ -232,12 +232,12 @@ function App() {
       });
 
       PLAYER.addListener("not_ready", ({ device_id }) => {
-        console.log("not", device_id);
+        console.log("aaaaaaaaaaaaaaaaaaaaa");
         setIsConnected(false);
       });
       PLAYER.addListener("player_state_changed", (state) => {});
       PLAYER.addListener("ready", ({ device_id }) => {
-        console.log(1);
+        console.log("bbbbbbbbbbbbbbbbbbb");
         setDeviceId(device_id);
         setIsConnected(true);
       });
@@ -249,9 +249,9 @@ function App() {
         console.error("Account error:", message);
       });
 
-      // PLAYER.addListener("playback_error", ({ message }) => {
-      //   console.error("Playback error:", message);
-      // });
+      PLAYER.addListener("playback_error", ({ message }) => {
+        console.error("Playback error:", message);
+      });
       PLAYER.addListener("authentication_error", ({ message }) => {
         console.log(2);
         console.error("Authentication error:", message);
@@ -266,8 +266,8 @@ function App() {
         playerSDK.disconnect();
       }
     }; //153600
-  }, [window.Spotify]);
-  console.log(isPlaying);
+  }, [window.Spotify, token]);
+  console.log(deviceId);
   function playNextTrack() {
     console.log(playlistQueue);
     playTrack(playlistQueue[queTrackIndex + 1].track.uri);

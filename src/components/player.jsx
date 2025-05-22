@@ -75,8 +75,9 @@ export default function Player({
             alt=""
             className="w-[13%] sm:w-[11%] rounded-lg mr-5 ml-5"
             onClick={() => {
-              setShowPhoneTrackSection(true);
-              console.log(1);
+              if (window.innerWidth <= 640) {
+                setShowPhoneTrackSection(true);
+              }
             }}
           />
           <div>
