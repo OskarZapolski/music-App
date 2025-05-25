@@ -44,12 +44,8 @@ export default function SearchedTrack({
                 duration: track.duration_ms,
               });
               playTrack(track.uri);
-              // if (id && id >= 0) {
-              //   console.log(id);
-              //   setQueueFromCurrentPlaylist(id, tracksArr);
-              // }
+
               setSearchInputValue("");
-              console.log(1);
             }}
           />
         </div>

@@ -64,10 +64,11 @@ export default function PlaylistBody({
       let id = -1;
       if (tracksArr) {
         setTracksToDisplay(
-          tracksArr.map((track) => {
+          tracksArr.map((track, i) => {
             id++;
             return (
               <Track
+                key={i}
                 track={track}
                 setPrevUrl={setPrevUrl}
                 setPlayer={setPlayer}

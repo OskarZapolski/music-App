@@ -1,5 +1,4 @@
 export default function getPlaylist(token, category) {
-  console.log(token);
   const fetchOptions = {
     method: "GET",
     headers: {
@@ -20,7 +19,6 @@ export default function getPlaylist(token, category) {
         }
       })
       .then((data) => {
-        console.log(data);
         return [category, ...data.playlists.items];
       });
   });

@@ -34,12 +34,10 @@ export default function PlayMusicIcon({
           duration: track.duration_ms,
         });
         playTrack(track.uri);
-        console.log(track);
+
         if (id && id >= 0) {
-          console.log(id);
           setQueueFromCurrentPlaylist(id, tracksArr);
         }
-        console.log(2);
       }}
     >
       <g>

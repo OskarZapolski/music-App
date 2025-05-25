@@ -24,12 +24,13 @@ export default function Track({
 
   useEffect(() => {
     if (favoriteTracks) {
-      const isThereTrack = favoriteTracks.some(
-        (ftrack) => ftrack.track.id == track.track.id
-      );
+      const isThereTrack = favoriteTracks.some((ftrack) => {
+        return ftrack.track.id == track.track.id;
+      });
+
       setHeartColor(isThereTrack);
     }
-  }, [favoriteTracks]);
+  }, [favoriteTracks, track]);
 
   return (
     <div className="group sm:grid grid-cols-8 py-3 px-3 hover:bg-[#51515169] items-center duration-200 rounded-lg flex">
@@ -39,7 +40,6 @@ export default function Track({
           alt=""
           className="relative rounded-md w-[13%] xl:w-[55px]  2xl:w-[60px]  mr-5 group-hover:-z-2"
           onClick={() => {
-            console.log(1);
             setPrevUrl(location.pathname);
             setPlayer({
               img: track.track.album.images[2].url,
@@ -50,8 +50,8 @@ export default function Track({
               duration: track.track.duration_ms,
             });
             playTrack(track.track.uri);
-            if (id && id >= 0) {
-              console.log(id);
+            if (id >= 0) {
+              console.log(1);
               setQueueFromCurrentPlaylist(id, tracksArr);
             }
           }}

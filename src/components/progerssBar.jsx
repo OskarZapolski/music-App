@@ -50,9 +50,7 @@ export default function ProgerssBar({ duration }) {
       },
     };
     async function getCurrentTime() {
-      fetch("https://api.spotify.com/v1/me/player", param)
-        .then((res) => res.json())
-        .then((data) => console.log(data));
+      fetch("https://api.spotify.com/v1/me/player", param);
     }
     getCurrentTime();
   }, []);

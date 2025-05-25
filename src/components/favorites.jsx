@@ -28,7 +28,7 @@ export default function Favorites({ token }) {
     useContext(playerContext);
 
   const { favoriteTracks } = useContext(favoriteContext);
-  console.log(favoriteTracks);
+
   const { showPhoneTrackSection, setShowPhoneTrackSection } =
     useContext(queueContext);
 
@@ -48,10 +48,11 @@ export default function Favorites({ token }) {
     function displayFavoriteTracks() {
       let id = -1;
       if (favoriteTracks) {
-        return favoriteTracks.map((track) => {
+        return favoriteTracks.map((track, i) => {
           id++;
           return (
             <Track
+              key={i}
               track={track}
               setPrevUrl={setPrevUrl}
               setPlayer={setPlayer}
@@ -65,7 +66,7 @@ export default function Favorites({ token }) {
     }
     setTracksToDisplay(displayFavoriteTracks());
   }, [favoriteTracks]);
-  console.log(tracksToDisplay);
+
   return (
     <div className="w-full">
       <Navbar isPlaying={isPlaying} prevUrl={prevUrl} setPrevUrl={setPrevUrl} />

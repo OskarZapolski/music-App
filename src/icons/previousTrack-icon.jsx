@@ -12,7 +12,6 @@ export default function PreviousTrackIcon({ playPreviousTrack, setIsPlaying }) {
       viewBox="0 0 51.532 51.532"
       className="fill-slate-100 hover:scale-110 duration-150"
       onClick={() => {
-        console.log(1);
         playPreviousTrack();
         setIsPlaying(true);
       }}

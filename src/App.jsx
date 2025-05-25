@@ -12,6 +12,7 @@ import Home from "./components/home";
 import PlaylistBody from "./components/playlistBody";
 import SearchedTrack from "./components/searchedTrack";
 import Favorites from "./components/favorites";
+import Player from "./components/player";
 
 export const playerContext = createContext();
 export const playTrackFunctionContext = createContext();
@@ -39,10 +40,8 @@ function App() {
   const [favoriteTracks, setFavoriteTracks] = useState([]);
   const clientId = "aa11595a5869411eacc30f6af0af738d";
   const secretId = "3e867675d0254603a866f88d98ad3820";
-  //glosnosc phone i slide jak klikasz na iconke piosenki
-  // zrob aby na telefonie w playlistach nie bylo tej iconki play i aby kolejka dzialala
+  // kolejka do favorite zrob i hosting na github i zobacz przez 1h bez odswiezania czy dziala refreshowanie tokena
 
-  console.log(playlistQueue);
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const authCode = urlParams.get("code");
@@ -52,7 +51,6 @@ function App() {
   }, []);
 
   async function refreshAccessToken() {
-    console.log("a");
     const refresh_token = localStorage.getItem("refreshToken");
     try {
       const response = await fetch("https://accounts.spotify.com/api/token", {
@@ -75,8 +73,6 @@ function App() {
       const newRefreshToken = data.refresh_token
         ? data.refresh_token
         : refresh_token;
-
-      console.log(data);
 
       setToken(newAccessToken);
       localStorage.setItem("token", newAccessToken);
@@ -106,14 +102,11 @@ function App() {
         body: body,
       });
 
-      console.log(response);
-
       const data = await response.json();
-      console.log("Access Token:", data.access_token);
+
       setToken(data.access_token);
       localStorage.setItem("token", data.access_token);
       localStorage.setItem("refreshToken", data.refresh_token);
-      console.log("Refresh Token:", data.refresh_token);
     } catch (error) {
       console.error("Error getting token:", error);
     }
@@ -185,11 +178,6 @@ function App() {
         }
       })
       .catch((err) => console.error(err));
-    //   if (heartColor == false) {
-    //     setFavoriteTracks((prev) => [...prev, track]);
-    //   }
-    //   setHeartColor((prev) => !prev);
-    //   console.log(heartColor);
   }
 
   useEffect(() => {
@@ -208,6 +196,41 @@ function App() {
   }, []);
 
   // playerSDKEventsHandler();
+  async function initializePLayer(tokenSDK) {
+    const PLAYER = new window.Spotify.Player({
+      name: "Web Playback SDK Quick Start Player",
+      getOAuthToken: (cb) => {
+        cb(tokenSDK);
+      },
+      volume: 0.3,
+    });
+
+    PLAYER.addListener("not_ready", ({ device_id }) => {
+      setIsConnected(false);
+    });
+    PLAYER.addListener("player_state_changed", (state) => {});
+    PLAYER.addListener("ready", ({ device_id }) => {
+      setDeviceId(device_id);
+      setIsConnected(true);
+    });
+    PLAYER.addListener("initialization_error", ({ message }) => {
+      console.error("Initialization error:", message);
+    });
+
+    PLAYER.addListener("account_error", ({ message }) => {
+      console.error("Account error:", message);
+    });
+
+    PLAYER.addListener("playback_error", ({ message }) => {
+      console.error("Playback error:", message);
+    });
+    PLAYER.addListener("authentication_error", ({ message }) => {
+      console.error("Authentication error:", message);
+    });
+
+    await PLAYER.connect();
+    setPlayerSDK(PLAYER);
+  }
   useEffect(() => {
     const tokenSDK = token;
 
@@ -222,44 +245,7 @@ function App() {
     }
     handleLogin();
 
-    window.onSpotifyWebPlaybackSDKReady = () => {
-      const PLAYER = new Spotify.Player({
-        name: "Web Playback SDK Quick Start Player",
-        getOAuthToken: (cb) => {
-          cb(tokenSDK);
-        },
-        volume: 0.3,
-      });
-
-      PLAYER.addListener("not_ready", ({ device_id }) => {
-        console.log("aaaaaaaaaaaaaaaaaaaaa");
-        setIsConnected(false);
-      });
-      PLAYER.addListener("player_state_changed", (state) => {});
-      PLAYER.addListener("ready", ({ device_id }) => {
-        console.log("bbbbbbbbbbbbbbbbbbb");
-        setDeviceId(device_id);
-        setIsConnected(true);
-      });
-      PLAYER.addListener("initialization_error", ({ message }) => {
-        console.error("Initialization error:", message);
-      });
-
-      PLAYER.addListener("account_error", ({ message }) => {
-        console.error("Account error:", message);
-      });
-
-      PLAYER.addListener("playback_error", ({ message }) => {
-        console.error("Playback error:", message);
-      });
-      PLAYER.addListener("authentication_error", ({ message }) => {
-        console.log(2);
-        console.error("Authentication error:", message);
-      });
-
-      PLAYER.connect();
-      setPlayerSDK(PLAYER);
-    };
+    initializePLayer(tokenSDK);
 
     return () => {
       if (playerSDK) {
@@ -267,9 +253,8 @@ function App() {
       }
     }; //153600
   }, [window.Spotify, token]);
-  console.log(deviceId);
+
   function playNextTrack() {
-    console.log(playlistQueue);
     playTrack(playlistQueue[queTrackIndex + 1].track.uri);
 
     setPlayer({
@@ -280,6 +265,7 @@ function App() {
       preview_url: playlistQueue[queTrackIndex + 1].track.preview_url,
       duration: playlistQueue[queTrackIndex + 1].track.duration_ms,
     });
+
     setQueTrackIndex((prev) => (prev += 1));
   }
   function playPreviousTrack() {
@@ -303,7 +289,6 @@ function App() {
   }, [playBackTime]);
 
   async function playTrack(trackUri) {
-    console.log(trackUri);
     const apiUrl = `https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`;
     const requestBody = {
       uris: [trackUri],
@@ -320,12 +305,6 @@ function App() {
         },
         body: JSON.stringify(requestBody),
       });
-
-      if (response.ok) {
-        console.log("playing");
-      } else {
-        console.log("err");
-      }
     } catch (err) {
       console.error(err, "eroor");
     }
@@ -375,7 +354,7 @@ function App() {
       });
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+
         setSearchedTracks(data.tracks.items.map((track) => ({ ...track })));
       }
     }
@@ -385,10 +364,10 @@ function App() {
 
   useEffect(() => {
     if (searchedTracks) {
-      const arr = searchedTracks.map((track) => {
-        console.log(track);
+      const arr = searchedTracks.map((track, i) => {
         return (
           <SearchedTrack
+            key={i}
             artist={track.artists[0].name}
             name={track.name}
             image={track.album.images[2].url}
@@ -404,23 +383,12 @@ function App() {
     }
   }, [searchedTracks]);
 
-  // useEffect(() => {
-  //   async function checkConnection() {
-  //     try {
-  //       const connectionStatus = await playerSDK.isConnected();
-  //       console.log(connectionStatus);
-  //     } catch (err) {
-  //       console.error("error", err);
-  //     }
-  //   }
-  //   checkConnection();
-  // }, [playerSDK]);
-
   function setQueueFromCurrentPlaylist(id, tracksArr) {
     if (id < tracksArr.length) {
       const arr = tracksArr.slice(id);
 
       setPlaylistQueue(arr);
+      setQueTrackIndex(0);
     }
   }
 

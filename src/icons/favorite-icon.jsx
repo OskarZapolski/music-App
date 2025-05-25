@@ -19,7 +19,7 @@ export default function FavoriteIcon({
       xmlns="http://www.w3.org/2000/svg"
       onClick={() => {
         addToFavorite && addToFavorite(track, heartColor, setHeartColor);
-        track && console.log(track.track);
+
         nav && nav("/favorites");
         nav && setPrevUrl(location.pathname);
       }}

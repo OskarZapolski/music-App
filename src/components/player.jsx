@@ -46,17 +46,14 @@ export default function Player({
 
   function changeVolume(e) {
     setVolume(e.nativeEvent.offsetX / volumeBar.current.offsetWidth);
-    console.log();
-    playerSDK
-      .setVolume(e.nativeEvent.offsetX / volumeBar.current.offsetWidth)
-      .then((res) => console.log("changed"));
+
+    playerSDK.setVolume(e.nativeEvent.offsetX / volumeBar.current.offsetWidth);
   }
   const volumeStyle = {
     width: `${Math.floor(volume * 100)}%`,
   };
 
   function soundIconHandler() {
-    console.log(volume);
     if (volume > 0) {
       setVolume(0);
       playerSDK.setVolume(0);

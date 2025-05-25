@@ -23,15 +23,6 @@ export default function Home({ token, clientId, secretId, isPlaying }) {
         refresh_token: refreshToken,
       }),
     };
-
-    // fetch("https://accounts.spotify.com/api/token", fetchRefreshTokenOptions)
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     console.log(data);
-    //     if (data.refreshToken) {
-    //       localStorage.setItem("refresh_token", data.refreshToken);
-    //     }
-    //   });
   }, [token]);
 
   useEffect(() => {
