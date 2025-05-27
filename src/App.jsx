@@ -395,7 +395,8 @@ function App() {
   const containerStyles = {
     height: player ? (showPhoneTrackSection ? "100vh" : "88vh") : "full",
   };
-
+  console.log(token);
+  localStorage.removeItem("token");
   return (
     <div className="font-normal">
       <div
