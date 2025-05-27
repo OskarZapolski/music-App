@@ -83,7 +83,7 @@ function App() {
   }
 
   async function exchangeCodeForToken(authCode) {
-    const redirect_uri = "http://localhost:5173/";
+    const redirect_uri = "https://oskarzapolski.github.io/music-App/";
 
     const body = new URLSearchParams({
       grant_type: "authorization_code",
