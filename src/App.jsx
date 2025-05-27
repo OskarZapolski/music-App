@@ -454,7 +454,7 @@ function App() {
                     >
                       <Routes>
                         <Route
-                          path="/"
+                          path="https://oskarzapolski.github.io/music-App/"
                           element={
                             <Home
                               token={token}
@@ -466,7 +466,7 @@ function App() {
                         />
 
                         <Route
-                          path="/playlist"
+                          path="https://oskarzapolski.github.io/music-App/playlist"
                           element={
                             <PlaylistBody
                               setIsPlaying={setIsPlaying}
@@ -477,7 +477,7 @@ function App() {
                           }
                         />
                         <Route
-                          path="/favorites"
+                          path="https://oskarzapolski.github.io/music-App/favorites"
                           element={<Favorites token={token} />}
                         />
                       </Routes>
