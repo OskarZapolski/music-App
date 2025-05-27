@@ -20,7 +20,7 @@ export default function MainContent({ playlists, categories }) {
   const [searchParam] = useSearchParams();
   const nav = useNavigate();
   useEffect(() => {
-    nav("/");
+    nav("/music-App/");
   }, []);
 
   const [playlistsTodisplay, setPlaylistsToDisplay] = useState();

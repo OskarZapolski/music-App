@@ -21,7 +21,7 @@ export default function PlaylistIcon({
       key={id}
       onClick={() => {
         setPrevUrl(location.pathname);
-        nav("/playlist", {
+        nav("/music-App/playlist", {
           state: { id, name, images, tracksUrl, isPlaying },
         });
         setPlaylistToDisplay({

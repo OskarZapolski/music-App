@@ -20,7 +20,7 @@ export default function FavoriteIcon({
       onClick={() => {
         addToFavorite && addToFavorite(track, heartColor, setHeartColor);
 
-        nav && nav("/favorites");
+        nav && nav("/music-App/favorites");
         nav && setPrevUrl(location.pathname);
       }}
     >

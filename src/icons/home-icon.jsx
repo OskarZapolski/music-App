@@ -6,7 +6,7 @@ export default function HomeIcon({ styles, isPlaying, setPrevUrl, prevUrl }) {
     <svg
       onClick={() => {
         setPrevUrl(location.pathname);
-        return nav("/", { state: { isPlaying } });
+        return nav("/music-App/", { state: { isPlaying } });
       }}
       className={styles}
       fill="currentColor"
