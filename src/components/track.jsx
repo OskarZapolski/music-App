@@ -51,7 +51,6 @@ export default function Track({
             });
             playTrack(track.track.uri);
             if (id >= 0) {
-              console.log(1);
               setQueueFromCurrentPlaylist(id, tracksArr);
             }
           }}

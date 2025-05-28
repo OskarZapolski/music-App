@@ -47,6 +47,9 @@ function App() {
     const authCode = urlParams.get("code");
     if (authCode) {
       setCode(authCode);
+
+      const cleanUrl = window.location.origin + window.location.pathname;
+      window.history.replaceState({}, document.title, cleanUrl);
     }
   }, []);
 
@@ -395,8 +398,7 @@ function App() {
   const containerStyles = {
     height: player ? (showPhoneTrackSection ? "100vh" : "88vh") : "full",
   };
-  console.log(token);
-  localStorage.removeItem("token");
+
   return (
     <div className="font-normal">
       <div

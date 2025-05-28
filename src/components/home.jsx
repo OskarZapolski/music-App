@@ -42,6 +42,7 @@ export default function Home({ token, clientId, secretId, isPlaying }) {
         })
       );
     }
+    setPlaylist();
     return setPlaylist;
   }, [token]);
   // rgba(22,3,45,0.7344187675070029)

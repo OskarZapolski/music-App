@@ -57,7 +57,7 @@ export default function PlaylistBody({
     }
     fetchTracks();
     return fetchTracks;
-  }, []);
+  }, [accessToken]);
 
   useEffect(() => {
     function displayTrackData() {
