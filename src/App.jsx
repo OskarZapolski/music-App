@@ -38,10 +38,12 @@ function App() {
   const [queTrackIndex, setQueTrackIndex] = useState(0);
   const [showPhoneTrackSection, setShowPhoneTrackSection] = useState(false);
   const [favoriteTracks, setFavoriteTracks] = useState([]);
+  const [containerStyles, setContainerStyles] = useState();
   const clientId = "aa11595a5869411eacc30f6af0af738d";
-  const secretId = "3e867675d0254603a866f88d98ad3820";
+
   // kolejka do favorite zrob i hosting na github i zobacz przez 1h bez odswiezania czy dziala refreshowanie tokena
 
+  //zrob tak zeby po log out container styles height bylo full
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const authCode = urlParams.get("code");
@@ -53,82 +55,115 @@ function App() {
     }
   }, []);
 
-  async function refreshAccessToken() {
-    const refresh_token = localStorage.getItem("refreshToken");
-    try {
-      const response = await fetch("https://accounts.spotify.com/api/token", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: new URLSearchParams({
-          grant_type: "refresh_token",
-          refresh_token: refresh_token,
-          client_id: clientId,
-          client_secret: secretId,
-        }),
-      });
-      if (!response.ok) {
-        throw new Error("Failed to get refresh token");
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (hash) {
+      const params = new URLSearchParams(hash.substring(1));
+      const _token = params.get("access_token");
+      if (_token) {
+        setToken(_token);
+        localStorage.setItem("expirationTime", Date.now() + 3500000);
+        localStorage.setItem("token", _token);
+        window.history.replaceState(
+          null,
+          "",
+          window.location.href.split("#")[0]
+        );
       }
-      const data = await response.json();
-      const newAccessToken = data.access_token;
-      const newRefreshToken = data.refresh_token
-        ? data.refresh_token
-        : refresh_token;
-
-      setToken(newAccessToken);
-      localStorage.setItem("token", newAccessToken);
-      localStorage.setItem("refreshToken", newRefreshToken);
-    } catch (err) {
-      console.error("error refresh token ", err);
     }
-  }
-
-  async function exchangeCodeForToken(authCode) {
-    const redirect_uri = "https://oskarzapolski.github.io/music-App/";
-
-    const body = new URLSearchParams({
-      grant_type: "authorization_code",
-      code: authCode,
-      redirect_uri: redirect_uri,
-      client_id: clientId,
-      client_secret: secretId,
-    });
-
-    try {
-      const response = await fetch("https://accounts.spotify.com/api/token", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: body,
-      });
-
-      const data = await response.json();
-
-      setToken(data.access_token);
-      localStorage.setItem("token", data.access_token);
-      localStorage.setItem("refreshToken", data.refresh_token);
-    } catch (error) {
-      console.error("Error getting token:", error);
-    }
-  }
-
+  }, []);
   useEffect(() => {
-    if (!token) return;
-    const refreshInterval = setInterval(() => {
-      refreshAccessToken();
-    }, 3500000);
-
-    return () => clearInterval(refreshInterval);
+    window.history.replaceState(null, "", window.location.href.split("#")[0]);
   }, [token]);
-
   useEffect(() => {
-    if (code) {
-      exchangeCodeForToken(code);
+    const expirationTime = localStorage.getItem("expirationTime");
+
+    if (Date.now() > parseInt(expirationTime)) {
+      stopPlaying();
+      localStorage.removeItem("token");
+      localStorage.removeItem("expirationTime");
+      setToken("");
+      setPlayer();
+      setContainerStyles({ height: "full" });
     }
-  }, [code]);
+  }, []);
+
+  // async function refreshAccessToken() {
+  //   const refresh_token = localStorage.getItem("refreshToken");
+  //   try {
+  //     const response = await fetch("https://accounts.spotify.com/api/token", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/x-www-form-urlencoded",
+  //       },
+  //       body: new URLSearchParams({
+  //         grant_type: "refresh_token",
+  //         refresh_token: refresh_token,
+  //         client_id: clientId,
+  //         client_secret: secretId,
+  //       }),
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error("Failed to get refresh token");
+  //     }
+  //     const data = await response.json();
+  //     const newAccessToken = data.access_token;
+  //     const newRefreshToken = data.refresh_token
+  //       ? data.refresh_token
+  //       : refresh_token;
+
+  //     setToken(newAccessToken);
+  //     localStorage.setItem("token", newAccessToken);
+  //     localStorage.setItem("refreshToken", newRefreshToken);
+  //   } catch (err) {
+  //     console.error("error refresh token ", err);
+  //   }
+  // }
+
+  // async function exchangeCodeForToken(authCode) {
+  //   const redirect_uri = "https://oskarzapolski.github.io/music-App/";
+
+  //   const body = new URLSearchParams({
+  //     grant_type: "authorization_code",
+  //     code: authCode,
+  //     redirect_uri: redirect_uri,
+  //     client_id: clientId,
+  //     client_secret: secretId,
+  //   });
+
+  //   try {
+  //     const response = await fetch("https://accounts.spotify.com/api/token", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/x-www-form-urlencoded",
+  //       },
+  //       body: body,
+  //     });
+
+  //     const data = await response.json();
+
+  //     setToken(data.access_token);
+  //     localStorage.setItem("token", data.access_token);
+  //     localStorage.setItem("refreshToken", data.refresh_token);
+  //   } catch (error) {
+  //     console.error("Error getting token:", error);
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   if (!token) return;
+  //   const refreshInterval = setInterval(() => {
+  //     refreshAccessToken();
+  //   }, 3500000);
+
+  //   return () => clearInterval(refreshInterval);
+  // }, [token]);
+
+  // useEffect(() => {
+  //   if (code) {
+  //     exchangeCodeForToken(code);
+  //   }
+  // }, [code]);
 
   useEffect(() => {
     fetch("https://api.spotify.com/v1/me/tracks?limit=50", {
@@ -329,6 +364,7 @@ function App() {
   }, [playerSDK]);
 
   async function stopPlaying() {
+    console.log(playerSDK);
     try {
       await playerSDK.pause();
     } catch (err) {
@@ -342,6 +378,20 @@ function App() {
       console.error(err);
     }
   }
+  useEffect(() => {
+    console.log(playerSDK);
+    if (!token || !playerSDK) return;
+    const intervalId = setInterval(() => {
+      stopPlaying();
+      alert("your token has expired you have to log in again");
+      localStorage.removeItem("token");
+      setToken("");
+
+      setPlayer();
+      setContainerStyles({ height: "full" });
+    }, 3500000);
+    return () => clearInterval(intervalId);
+  }, [token, playerSDK]);
 
   useEffect(() => {
     const url = `https://api.spotify.com/v1/search?q=${encodeURIComponent(
@@ -395,9 +445,11 @@ function App() {
     }
   }
 
-  const containerStyles = {
-    height: player ? (showPhoneTrackSection ? "100vh" : "88vh") : "full",
-  };
+  useEffect(() => {
+    setContainerStyles({
+      height: player ? (showPhoneTrackSection ? "100vh" : "88vh") : "100vh",
+    });
+  }, [player, token]);
 
   return (
     <div className="font-normal">
@@ -424,6 +476,8 @@ function App() {
                   setSearchInputValue,
                   searchedTracksArr,
                   setSearchedTrackArr,
+                  setToken,
+                  setContainerStyles,
                 ]}
               >
                 <playTrackFunctionContext.Provider
@@ -463,7 +517,6 @@ function App() {
                             <Home
                               token={token}
                               clientId={clientId}
-                              secretId={secretId}
                               isPlaying={isPlaying}
                             />
                           }

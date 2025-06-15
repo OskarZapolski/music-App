@@ -22,6 +22,8 @@ export default function Favorites({ token }) {
     setSearchInputValue,
     searchedTracksArr,
     setSearchedTrackArr,
+    setToken,
+    setContainerStyles,
   ] = useContext(searchContext);
 
   const [player, setPlayer, isPlaying, setIsPlaying, setPrevUrl, prevUrl] =
@@ -71,6 +73,10 @@ export default function Favorites({ token }) {
     <div className="w-full">
       <Navbar isPlaying={isPlaying} prevUrl={prevUrl} setPrevUrl={setPrevUrl} />
       <SearchMenu
+        setContainerStyles={setContainerStyles}
+        setPlayer={setPlayer}
+        setToken={setToken}
+        stopPlaying={stopPlaying}
         searchInputValue={searchInputValue}
         setSearchInputValue={setSearchInputValue}
         searchedTracksArr={searchedTracksArr}

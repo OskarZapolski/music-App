@@ -39,6 +39,8 @@ export default function PlaylistBody({
     setSearchInputValue,
     searchedTracksArr,
     setSearchedTrackArr,
+    setToken,
+    setContainerStyles,
   ] = useContext(searchContext);
 
   const accessToken = localStorage.getItem("token");
@@ -136,6 +138,10 @@ export default function PlaylistBody({
       {tracksToDisplay && !showPhoneTrackSection ? (
         <>
           <SearchMenu
+            setContainerStyles={setContainerStyles}
+            setPlayer={setPlayer}
+            setToken={setToken}
+            stopPlaying={stopPlaying}
             inputStyle={inputStyle}
             searchInputValue={searchInputValue}
             setSearchInputValue={setSearchInputValue}

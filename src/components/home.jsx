@@ -5,25 +5,25 @@ import MainContent from "./mainContent";
 import LoadingIcon from "../icons/loadingIcon";
 import Navbar from "./navbar";
 
-export default function Home({ token, clientId, secretId, isPlaying }) {
+export default function Home({ token, clientId, isPlaying }) {
   const [randomPlaylists, setRandomPlaylists] = useState([]);
   const categories = ["chill vibes", "pop", "rap", "rock"];
 
-  useEffect(() => {
-    const refreshToken = localStorage.getItem("refresh_token");
+  // useEffect(() => {
+  //   const refreshToken = localStorage.getItem("refresh_token");
 
-    const fetchRefreshTokenOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Authorization: "Basic " + btoa(clientId + ":" + secretId),
-      },
-      body: new URLSearchParams({
-        grant_type: "refresh_token",
-        refresh_token: refreshToken,
-      }),
-    };
-  }, [token]);
+  //   const fetchRefreshTokenOptions = {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/x-www-form-urlencoded",
+  //       Authorization: "Basic " + btoa(clientId + ":" + secretId),
+  //     },
+  //     body: new URLSearchParams({
+  //       grant_type: "refresh_token",
+  //       refresh_token: refreshToken,
+  //     }),
+  //   };
+  // }, [token]);
 
   useEffect(() => {
     async function setPlaylist() {

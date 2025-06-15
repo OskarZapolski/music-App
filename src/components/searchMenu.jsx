@@ -1,7 +1,13 @@
+import { useNavigate } from "react-router-dom";
+
 export default function SearchMenu({
   searchInputValue,
+  setPlayer,
+  stopPlaying,
   setSearchInputValue,
   searchedTracksArr,
+  setToken,
+  setContainerStyles,
 }) {
   const inputStyle = {
     borderBottomLeftRadius: searchInputValue ? "0" : "1.5rem",
@@ -10,6 +16,7 @@ export default function SearchMenu({
   const stylePos = {
     position: "fixed",
   };
+  const nav = useNavigate();
   return (
     <div style={stylePos} className="w-full h-[10%] z-10 right-0  fixed">
       <div className=" bg-[#000000] h-full flex items-center justify-center flex-col relative">
@@ -27,6 +34,23 @@ export default function SearchMenu({
               {searchedTracksArr}
             </div>
           )}
+        </div>
+        <div className="absolute top-4 right-4">
+          <button
+            className="text-white bg-purple-600 py-2 px-3 rounded-lg"
+            onClick={() => {
+              console.log(1);
+              localStorage.removeItem("token");
+              setToken("");
+              stopPlaying();
+
+              setPlayer();
+              setContainerStyles({ height: "full" });
+              nav("/music-App/");
+            }}
+          >
+            log out
+          </button>
         </div>
       </div>
     </div>

@@ -33,6 +33,8 @@ export default function MainContent({ playlists, categories }) {
     setSearchInputValue,
     searchedTracksArr,
     setSearchedTrackArr,
+    setToken,
+    setContainerStyles,
   ] = useContext(searchContext);
   const { showPhoneTrackSection, setShowPhoneTrackSection } =
     useContext(queueContext);
@@ -98,6 +100,10 @@ export default function MainContent({ playlists, categories }) {
         <div className="w-full">
           <playlistContext.Provider value={{ setPlaylistsToDisplay }}>
             <SearchMenu
+              setContainerStyles={setContainerStyles}
+              setPlayer={setPlayer}
+              setToken={setToken}
+              stopPlaying={stopPlaying}
               searchInputValue={searchInputValue}
               setSearchInputValue={setSearchInputValue}
               searchedTracksArr={searchedTracksArr}
