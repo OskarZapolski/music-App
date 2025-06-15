@@ -450,7 +450,7 @@ function App() {
       height: player ? (showPhoneTrackSection ? "100vh" : "88vh") : "100vh",
     });
   }, [player, token]);
-
+  console.log(1);
   return (
     <div className="font-normal">
       <div
