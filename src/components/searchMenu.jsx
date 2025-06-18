@@ -39,7 +39,6 @@ export default function SearchMenu({
           <button
             className="text-white bg-purple-600 py-2 px-3 rounded-lg"
             onClick={() => {
-              console.log(1);
               localStorage.removeItem("token");
               setToken("");
               stopPlaying();
