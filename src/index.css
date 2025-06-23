@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@theme {
+  --animate-pulse-subtle: pulse-subtle 4s ease-in-out infinite;
+  --animate-move: move 7s ease-in-out infinite;
+  --animate-move-delay-2: move 7s ease-in-out 2s infinite;
+  --animate-move-delay-4: move 7s ease-in-out 4s infinite;
+}
+
 @layer utilities {
   /* Chrome, Safari and Opera */
   .scrollbar-hidden::-webkit-scrollbar {
