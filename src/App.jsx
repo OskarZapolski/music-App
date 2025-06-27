@@ -368,7 +368,7 @@ function App() {
       height: player ? (showPhoneTrackSection ? "100vh" : "88vh") : "100vh",
     });
   }, [player, token]);
-  localStorage.removeItem("token");
+  console.log(token);
   return (
     <div className="font-normal">
       <div
