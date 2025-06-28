@@ -367,8 +367,8 @@ function App() {
     setContainerStyles({
       height: player ? (showPhoneTrackSection ? "100vh" : "88vh") : "100vh",
     });
-  }, [player, token]);
-  console.log(token);
+  }, [player, token, showPhoneTrackSection]);
+
   return (
     <div className="font-normal">
       <div
