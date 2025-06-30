@@ -30,7 +30,7 @@ export default function SearchMenu({
         />
         <div className="relative w-full  text-white text-lg focus:outline-none ">
           {searchInputValue && (
-            <div className="w-3/4 sm:w-3/5 absolute lg:w-1/2 rounded-bl-2xl rounded-br-2xl p-2 bg-zinc-800  left-[37%] transform -translate-x-1/2 ">
+            <div className="w-3/4 sm:w-3/5 absolute lg:w-1/2 rounded-bl-2xl rounded-br-2xl p-2 bg-zinc-800  left-[37%] sm:left-1/2 transform -translate-x-1/2 ">
               {searchedTracksArr}
             </div>
           )}
